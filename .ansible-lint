@@ -1,0 +1,10 @@
+---
+offline: true
+skip_list:
+  - no-changed-when
+  - command-instead-of-module
+  - risky-shell-pipe
+  - no-handler
+  - yaml
+warn_list:
+  - command-instead-of-shell
