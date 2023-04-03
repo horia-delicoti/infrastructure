@@ -1,0 +1,22 @@
+---
+version: "3"
+
+tasks:
+  deps:
+    desc: Install pip dependencies
+    deps:
+      - create
+    cmds:
+      -  "{{._PYTHON | shellQuote}} -m pip install -r {{.PROJECT_DIR}}/requirements.txt"
+
+  create:
+    desc: Create a virtual environment for python
+    cmds:
+      - "{{.PYTHON | shellQuote}} -m venv {{.VENV_PATH}}"
+    preconditions:
+      - sh: command -v {{.PYTHON}}
+        msg: |
+          Python 3 is required but was not detected!
+      - sh: '{{.PYTHON}} --version 2>&1 | grep -q "^Python 3.11\."'
+        msg: |
+          Python version 3.11.X is required!

@@ -1,0 +1,23 @@
+---
+version: '3'
+
+vars:
+  PROJECT_DIR:
+    sh: "git rev-parse --show-toplevel"
+  PYTHON: python3
+  VENV_PATH: "{{.PROJECT_DIR}}/.venv"
+  _PYTHON: "{{.VENV_PATH}}/bin/python"
+
+includes:
+  venv: .taskfiles/VenvTasks.yml
+
+# Prin available tasks for this project
+tasks:
+  default:
+    cmds:
+      - task -l
+  
+  init:
+    desc: Initialize workspace (brew dependencies, python virtual environment, etc)
+    cmds:
+      - task: venv:deps

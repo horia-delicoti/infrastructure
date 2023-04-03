@@ -1,3 +1,15 @@
-# My personal infrastructure repo
+# My personal infrastructure Playbooks
 
-Used to deploy my home infrastructure. 
+## Getting started
+
+- Install [Task](https://taskfile.dev/)
+
+```sh
+brew install go-task
+```
+
+- Run command to install all the environment and dependencies
+
+```sh
+task init
+```
