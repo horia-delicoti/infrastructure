@@ -1,4 +1,6 @@
----
+# <https://ansible-lint.readthedocs.io/rules/>
+
 offline: true
 warn_list:
-  - command-instead-of-shell
+
+- command-instead-of-shell
