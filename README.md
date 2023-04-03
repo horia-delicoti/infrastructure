@@ -1,6 +1,6 @@
 # My personal infrastructure Playbooks
 
-## Getting started
+## Prerequisites
 
 - Install [Task](https://taskfile.dev/)
 
@@ -8,8 +8,14 @@
 brew install go-task
 ```
 
-- Run command to install all the environment and dependencies
+- Run command to install the environment and all dependencies
 
 ```sh
 task init
+```
+
+## Getting started
+
+```sh
+ansible-playbook docker_server.yml -u <user> -K
 ```
