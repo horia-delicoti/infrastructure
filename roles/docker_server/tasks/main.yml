@@ -1,10 +1,19 @@
 # https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-20-04
 ---
+- name: Update all packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+  tags:
+    - packages
+
 - name: Install aptitude
   ansible.builtin.apt:
     name: aptitude
     state: present
     update_cache: true
+  tags:
+    - docker
 
 - name: Install required system packages
   ansible.builtin.apt:
@@ -18,26 +27,36 @@
       - python3-setuptools
     state: present
     update_cache: true
+  tags:
+    - docker
 
 - name: Add Docker GPG apt Key
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
+  tags:
+    - docker
 
 - name: Add Docker Repository
   ansible.builtin.apt_repository:
     repo: deb https://download.docker.com/linux/ubuntu focal stable
     state: present
+  tags:
+    - docker
 
 - name: Update apt and install docker-ce
   ansible.builtin.apt:
     name: docker-ce
     state: present
     update_cache: true
+  tags:
+    - docker
 
 - name: Install Docker Module for Python
   ansible.builtin.pip:
     name: docker
+  tags:
+    - docker
 
 - name: Ensure services are started
   ansible.builtin.service:
@@ -46,8 +65,12 @@
     enabled: true
   with_items:
     - docker
+  tags:
+    - docker
 
-- name: Add to group "docker" the user {{ user }}
+- name: Add the user to group "docker" user {{ user }}
   ansible.builtin.user:
     name: "{{ user }}"
     group: docker
+  tags:
+    - docker
