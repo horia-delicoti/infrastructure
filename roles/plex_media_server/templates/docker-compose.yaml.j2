@@ -1,0 +1,64 @@
+--
+version: "2.1"
+services:
+  radarr:
+    image: {{ radarr_image }}
+    container_name: radarr
+    network_mode: host
+    environment:
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+      - TZ={{ timezone }}
+    volumes:
+      - {{ radarr_config_dir }}:/config # config files
+      - {{ movies_dir }}:/movies #optional
+      - {{ downloads_dir }}:/downloads #optional
+    restart: unless-stopped
+ 
+  sonarr:
+    image: {{ sonarr_image }}
+    container_name: sonarr
+    network_mode: host
+    environment:
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+      - TZ={{ timezone }}
+    volumes:
+       # - /etc/localtime:/etc/localtime:ro
+      - {{ sonarr_config_dir }}:/config # config files
+      - {{ tv_dir }}:/tv # tv shows folder
+      - {{ downloads_dir }}:/downloads # download folder
+    restart: unless-stopped
+
+  deluge:
+    image: {{ deluge_image }}
+    container_name: deluge
+    environment:
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+      - TZ={{ timezone }}
+      - DELUGE_LOGLEVEL=error #optional
+    volumes:
+      - {{ deluge_config_dir }}:/config
+      - {{ downloads_dir }}:/downloads
+    ports:
+      - 8112:8112
+      - 6881:6881
+      - 6881:6881/udp
+      - 58846:58846
+    restart: unless-stopped
+
+  plex:
+    image: {{ plex_image }}
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+      - VERSION=docker
+      - PLEX_CLAIM= #optional
+    volumes:
+      - {{ plex_config_dir }}:/config
+      - {{ tv_dir }}:/tv
+      - {{ movies_dir }}:/movies
+    restart: unless-stopped

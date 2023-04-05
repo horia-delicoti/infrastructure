@@ -1,0 +1,5 @@
+---
+
+- name: Install Sonarr, Radarr, Deluge and Plex
+  include: install.yml
+  when: media_server_deployment == 'install'

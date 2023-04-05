@@ -1,0 +1,32 @@
+media_server_deployment: install
+
+# https://docs.linuxserver.io/general/understanding-puid-and-pgid
+PUID: 1000
+PGID: 1000
+timezone: 'Europe/Bucharest'
+
+home_dir: /home/horia
+downloads_dir: "{{ home_dir }}/downloads"
+movies_dir : "{{ home_dir }}/movies"
+tv_dir: "{{ home_dir }}/tv"
+
+# Sonarr configuration vars
+###########################
+sonarr_image: 'linuxserver/sonarr:latest'
+sonarr_config_dir: /etc/sonarr
+
+# Radarr configuration vars
+###########################
+radarr_image: 'linuxserver/radarr:latest'
+radarr_config_dir: /etc/radarr
+
+# Deluge configuration vars
+###########################
+deluge_image: 'linuxserver/deluge:2.0.5'
+deluge_config_dir: /etc/deluge
+
+
+# Plex configuration vars
+#########################
+plex_image: 'lscr.io/linuxserver/plex:latest'
+plex_config_dir: /etc/plex/library
