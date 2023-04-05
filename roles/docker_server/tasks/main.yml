@@ -1,9 +1,13 @@
 # https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-20-04
+# - name: Install Docker
+#     ansible.builtin.shell: curl -sSL https://get.docker.com | sh
+
 ---
 - name: Update all packages to their latest version
   ansible.builtin.apt:
     name: "*"
     state: latest
+    update_only: true
   tags:
     - packages
 
