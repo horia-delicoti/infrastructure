@@ -1,5 +1,5 @@
 ---
 
 - name: Install Sonarr, Radarr, Deluge and Plex
-  include: install.yml
+  ansible.builtin.include: install.yml
   when: media_server_deployment == 'install'

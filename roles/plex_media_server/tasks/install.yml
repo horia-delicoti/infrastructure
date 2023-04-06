@@ -1,4 +1,5 @@
-# https://galaxy.ansible.com/community/general?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW
+# Prerequiste installation
+# https://galaxy.ansible.com/community/docker?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW
 ---
 - name: Create required directories
   ansible.builtin.file:
@@ -6,7 +7,7 @@
     state: directory
     owner: horia
     group: horia
-    mode: 0755
+    mode: "755"
   with_items:
     - "{{ downloads_dir }}"
     - "{{ movies_dir }}"
@@ -17,7 +18,7 @@
     - "{{ plex_config_dir }}"
 
 - name: Install docker-compose
-  pip:
+  ansible.builtin.pip:
     name: docker-compose
     executable: pip3
 
@@ -28,14 +29,13 @@
     dest: "{{ home_dir }}/docker-compose.yaml"
     owner: horia
     group: horia
-    mode: 0644
+    mode: "644"
 
 - name: Start container using docker compose file
   community.docker.docker_compose:
-    project_src: {{ home_dir }}
-    files:
-    - docker-compose.yaml
+    project_src: "{{ home_dir }}"
   register: output
 
-- ansible.builtin.debug:
+- name: Output log of docker
+  ansible.builtin.debug:
     var: output

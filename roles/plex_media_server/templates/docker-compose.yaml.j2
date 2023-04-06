@@ -1,13 +1,13 @@
---
 version: "2.1"
+
 services:
   radarr:
     image: {{ radarr_image }}
     container_name: radarr
     network_mode: host
     environment:
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
       - TZ={{ timezone }}
     volumes:
       - {{ radarr_config_dir }}:/config # config files
@@ -20,8 +20,8 @@ services:
     container_name: sonarr
     network_mode: host
     environment:
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
       - TZ={{ timezone }}
     volumes:
        # - /etc/localtime:/etc/localtime:ro
@@ -34,8 +34,8 @@ services:
     image: {{ deluge_image }}
     container_name: deluge
     environment:
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
       - TZ={{ timezone }}
       - DELUGE_LOGLEVEL=error #optional
     volumes:
@@ -53,8 +53,8 @@ services:
     container_name: plex
     network_mode: host
     environment:
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
       - VERSION=docker
       - PLEX_CLAIM= #optional
     volumes:

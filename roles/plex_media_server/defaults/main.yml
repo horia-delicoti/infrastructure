@@ -1,13 +1,13 @@
 media_server_deployment: install
 
 # https://docs.linuxserver.io/general/understanding-puid-and-pgid
-PUID: 1000
-PGID: 1000
+puid: 1000
+pgid: 1000
 timezone: 'Europe/Bucharest'
 
 home_dir: /home/horia
 downloads_dir: "{{ home_dir }}/downloads"
-movies_dir : "{{ home_dir }}/movies"
+movies_dir: "{{ home_dir }}/movies"
 tv_dir: "{{ home_dir }}/tv"
 
 # Sonarr configuration vars
