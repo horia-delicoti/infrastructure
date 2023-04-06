@@ -4,7 +4,6 @@ services:
   radarr:
     image: {{ radarr_image }}
     container_name: radarr
-    network_mode: host
     environment:
       - PUID={{ puid }}
       - PGID={{ pgid }}
@@ -13,12 +12,13 @@ services:
       - {{ radarr_config_dir }}:/config # config files
       - {{ movies_dir }}:/movies #optional
       - {{ downloads_dir }}:/downloads #optional
+    ports:
+      - 7878:7878
     restart: unless-stopped
  
   sonarr:
     image: {{ sonarr_image }}
     container_name: sonarr
-    network_mode: host
     environment:
       - PUID={{ puid }}
       - PGID={{ pgid }}
@@ -28,6 +28,8 @@ services:
       - {{ sonarr_config_dir }}:/config # config files
       - {{ tv_dir }}:/tv # tv shows folder
       - {{ downloads_dir }}:/downloads # download folder
+    ports:
+      - 8989:8989
     restart: unless-stopped
 
   deluge:
@@ -51,7 +53,6 @@ services:
   plex:
     image: {{ plex_image }}
     container_name: plex
-    network_mode: host
     environment:
       - PUID={{ puid }}
       - PGID={{ pgid }}
@@ -61,4 +62,6 @@ services:
       - {{ plex_config_dir }}:/config
       - {{ tv_dir }}:/tv
       - {{ movies_dir }}:/movies
+    ports:
+      - 32400:32400
     restart: unless-stopped

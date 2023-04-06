@@ -1,6 +1,0 @@
-- name: Plex media server
-  hosts: all
-  become: true
-
-  roles:
-    - role: plex_media_server

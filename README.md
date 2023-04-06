@@ -27,3 +27,4 @@ ansible-playbook docker_server.yml -u <user> -K
 <!-- Link labels: -->
 
 [server_setup_ubuntu]: https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-22-04
+[htpc-download-box]: https://github.com/sebgl/htpc-download-box

@@ -1,5 +1,6 @@
 # Prerequiste installation
 # https://galaxy.ansible.com/community/docker?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW
+
 ---
 - name: Create required directories
   ansible.builtin.file:

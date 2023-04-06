@@ -1,0 +1,6 @@
+- name: Htpc download box
+  hosts: all
+  become: true
+
+  roles:
+    - role: htpc_download_box
