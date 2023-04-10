@@ -18,6 +18,10 @@
     - "{{ deluge_config_dir }}"
     - "{{ plex_config_dir }}"
 
+- name: Install docker prerequiste
+  import_role:
+    name: docker_server
+
 - name: Install docker-compose
   ansible.builtin.pip:
     name: docker-compose
@@ -32,7 +36,7 @@
     group: horia
     mode: "644"
 
-- name: Start container using docker compose file
+- name: Start containers using docker compose file
   community.docker.docker_compose:
     project_src: "{{ home_dir }}"
   register: output

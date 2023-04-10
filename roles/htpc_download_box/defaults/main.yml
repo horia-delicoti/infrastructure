@@ -25,8 +25,11 @@ radarr_config_dir: /etc/radarr
 deluge_image: 'linuxserver/deluge:2.0.5'
 deluge_config_dir: /etc/deluge
 
-
 # Plex configuration vars
 #########################
 plex_image: 'lscr.io/linuxserver/plex:latest'
 plex_config_dir: /etc/plex/library
+
+# Homer configuration vars
+#########################
+homer_image: 'b4bz/homer'
