@@ -1,0 +1,11 @@
+---
+
+- name: Install Prometheus
+  ansible.builtin.include_tasks:
+    file: roles/prometheus/tasks/install.yml
+  when: prometheus_deployment == 'install'
+
+- name: Remove Prometheus
+  ansible.builtin.include_tasks:
+    file: removal.yaml
+  when: prometheus_deployment == 'removal'
