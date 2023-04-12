@@ -7,7 +7,6 @@
   ansible.builtin.apt:
     name: "*"
     state: latest
-    update_only: true
   tags:
     - packages
 
