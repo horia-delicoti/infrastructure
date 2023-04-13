@@ -7,9 +7,9 @@
     name: prometheus
     state: restarted
 
-- name: Reload prometheus
-  listen: "reload prometheus"
-  become: true
-  ansible.builtin.systemd:
-    name: prometheus
-    state: reloaded
+# - name: Reload prometheus
+#   listen: "reload prometheus"
+#   become: true
+#   ansible.builtin.systemd:
+#     name: prometheus
+#     state: reloaded
