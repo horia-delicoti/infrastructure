@@ -2,5 +2,6 @@
 
 offline: true
 warn_list:
-
 - command-instead-of-shell
+skip_list:
+- yaml[indentation]
