@@ -1,0 +1,10 @@
+---
+- name: Install Node exporter
+  ansible.builtin.include_tasks:
+    file: roles/node_exporter/tasks/install.yml
+  when: node_exporter_deployment == 'install'
+
+- name: Remove Node exporter
+  ansible.builtin.include_tasks:
+    file: roles/node_exporter/tasks/removal.yml
+  when: node_exporter_deployment == 'removal'
