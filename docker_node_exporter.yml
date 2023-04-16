@@ -3,4 +3,4 @@
   become: true
 
   roles:
-    - role: node_exporter
+    - role: docker_node_exporter
