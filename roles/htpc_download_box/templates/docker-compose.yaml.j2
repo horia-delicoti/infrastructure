@@ -77,3 +77,13 @@ services:
       - PUID={{ puid }}
       - PGID={{ pgid }}
       - INIT_ASSETS=1 # default
+
+  homeassistant:
+    image: {{ homeassistant_image }}
+    container_name: homeassistant
+    network_mode: host
+    privileged: true
+    volumes:
+      - {{ homeassistant_config_dir }}:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped 

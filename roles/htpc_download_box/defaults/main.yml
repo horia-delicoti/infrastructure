@@ -33,3 +33,7 @@ plex_config_dir: /etc/plex/library
 # Homer configuration vars
 #########################
 homer_image: 'b4bz/homer'
+
+# Home Assistant configuration vars
+homeassistant_image: 'ghcr.io/home-assistant/home-assistant:stable'
+homeassistant_config_dir: '/etc/home_assistant'
