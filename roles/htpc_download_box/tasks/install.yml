@@ -18,8 +18,8 @@
     - "{{ deluge_config_dir }}"
     - "{{ plex_config_dir }}"
 
-- name: Install docker prerequiste
-  import_role:
+- name: Prerequisite docker install
+  ansible.builtin.import_role:
     name: docker_server
 
 - name: Install docker-compose
