@@ -16,7 +16,7 @@ tasks:
   default:
     cmds:
       - task -l
-  
+
   init:
     desc: Initialize workspace (brew dependencies, python virtual environment, etc)
     cmds:
