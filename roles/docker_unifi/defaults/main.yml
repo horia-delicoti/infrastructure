@@ -1,0 +1,12 @@
+unifi_deployment: install
+
+puid: 1000
+pgid: 1000
+timezone: 'Europe/Bucharest'
+
+home_dir: "/home/horia"
+
+# Unifi configuration vars
+###########################
+unifi_image: 'lscr.io/linuxserver/unifi-controller:latest'
+unifi_config_dir: /etc/unifi

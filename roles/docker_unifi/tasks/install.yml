@@ -1,0 +1,39 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ unifi_config_dir }}"
+
+- name: Prerequisite docker install
+  ansible.builtin.import_role:
+    name: docker_server
+
+- name: Install docker-compose
+  ansible.builtin.pip:
+    name: docker-compose
+    executable: pip3
+
+- name: Copy docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ home_dir }}/docker-compose.unifi.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
+
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ home_dir }}"
+    files:
+    - docker-compose.unifi.yaml
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

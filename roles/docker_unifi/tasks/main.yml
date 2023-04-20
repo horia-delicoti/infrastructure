@@ -1,0 +1,6 @@
+---
+
+- name: Install Unifi
+  ansible.builtin.include_tasks:
+    file: roles/docker_unifi/tasks/install.yml
+  when: unifi_deployment == 'install'
