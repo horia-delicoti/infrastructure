@@ -1,0 +1,6 @@
+- name: Docker Grafana
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_grafana
