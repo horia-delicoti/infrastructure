@@ -7,6 +7,6 @@ timezone: 'Europe/Bucharest'
 home_dir: "/home/horia"
 
 # Unifi configuration vars
-###########################
+##########################
 unifi_image: 'lscr.io/linuxserver/unifi-controller:latest'
 unifi_config_dir: /etc/unifi
