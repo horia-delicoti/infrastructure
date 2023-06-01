@@ -2,5 +2,6 @@
   "python.terminal.activateEnvInCurrentTerminal": true,
   "python.terminal.activateEnvironment": true,
   "editor.bracketPairColorization.enabled": true,
-  "editor.guides.bracketPairs": "active"
+  "editor.guides.bracketPairs": "active",
+  "ansible.python.interpreterPath": "/Users/horia/sandbox/infrastructure/.venv/bin/python"
 }
