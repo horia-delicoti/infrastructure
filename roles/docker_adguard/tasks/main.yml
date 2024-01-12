@@ -1,0 +1,11 @@
+---
+
+- name: Install AdGuard
+  ansible.builtin.include_tasks:
+    file: roles/docker_adguard/tasks/install.yml
+  when: adguard_deployment == 'install'
+
+- name: Remove AdGuard
+  ansible.builtin.include_tasks:
+    file: roles/docker_adguard/tasks/remove.yml
+  when: adguard_deployment == 'remove'

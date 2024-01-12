@@ -1,0 +1,9 @@
+adguard_deployment: install
+
+adguard_home_dir: /home/horia/adguard
+
+# AdGuard Home configuration vars
+#################################
+adguard_image: adguard/adguardhome
+adguard_config_dir: /etc/adguard/conf
+adguard_work_dir: /etc/adguard/work

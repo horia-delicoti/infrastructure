@@ -1,0 +1,42 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ adguard_home_dir }}"
+    - "{{ adguard_config_dir }}"
+    - "{{ adguard_work_dir }}"
+
+- name: Copy AdGuoard docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.adguard.yaml.j2"
+    dest: "{{ adguard_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
+
+- name: Copy AdGuard config file
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ adguard_config_dir }}/"
+    owner: horia
+    group: horia
+    mode: '0644'
+  with_fileglob:
+    - roles/docker_adguard/files/conf/*.yaml
+
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ adguard_home_dir }}"
+    files:
+    - docker-compose.yaml
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

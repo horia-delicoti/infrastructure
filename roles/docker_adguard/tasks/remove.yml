@@ -1,0 +1,14 @@
+---
+- name: Stopping docker AdGuardHome container
+  community.docker.docker_compose:
+    project_src: "{{ adguard_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ adguard_home_dir }}"
+    - "{{ adguard_config_dir }}"
+    - "{{ adguard_work_dir }}"
