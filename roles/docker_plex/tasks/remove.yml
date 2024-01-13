@@ -1,0 +1,13 @@
+---
+- name: Stopping docker Plex container
+  community.docker.docker_compose:
+    project_src: "{{ plex_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ plex_config_dir }}"
+    - "{{ plex_home_dir }}"

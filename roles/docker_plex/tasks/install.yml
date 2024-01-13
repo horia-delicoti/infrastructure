@@ -1,0 +1,34 @@
+# https://www.plex.tv/claim/
+
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ plex_home_dir }}"
+    - "{{ plex_movies_dir }}"
+    - "{{ plex_tv_dir }}"
+    - "{{ plex_config_dir }}"
+    - "{{ plex_kids_dir }}"
+
+- name: Copy Plex docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ plex_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
+
+- name: Start Plex container using docker compose file
+  community.docker.docker_compose:
+    project_src: "{{ plex_home_dir }}"
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

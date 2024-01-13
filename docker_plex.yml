@@ -1,0 +1,7 @@
+- name: Install PLEX
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_server
+    - role: docker_plex

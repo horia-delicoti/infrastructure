@@ -1,0 +1,11 @@
+---
+
+- name: Install Plex
+  ansible.builtin.include_tasks:
+    file: roles/docker_plex/tasks/install.yml
+  when: plex_deployment == 'install'
+
+- name: Remove Plex
+  ansible.builtin.include_tasks:
+    file: roles/docker_plex/tasks/remove.yml
+  when: plex_deployment == 'remove'

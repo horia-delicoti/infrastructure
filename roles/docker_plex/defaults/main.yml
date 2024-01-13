@@ -1,0 +1,19 @@
+plex_deployment: install
+
+plex_home_dir: /home/horia/plex
+
+# https://docs.linuxserver.io/general/understanding-puid-and-pgid
+puid: 1000
+pgid: 1000
+timezone: 'Europe/London'
+
+home_dir: /home/horia
+plex_movies_dir: "{{ home_dir }}/movies"
+plex_tv_dir: "{{ home_dir }}/tv"
+plex_music_dir: "{{ home_dir }}/music"
+plex_kids_dir: "{{ home_dir }}/kids"
+
+# Plex configuration vars
+#########################
+plex_image: 'lscr.io/linuxserver/plex:latest'
+plex_config_dir: /etc/plex
