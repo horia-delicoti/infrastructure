@@ -1,5 +1,3 @@
-# https://www.plex.tv/claim/
-
 ---
 - name: Create required directories
   ansible.builtin.file:
