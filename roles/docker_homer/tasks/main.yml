@@ -1,0 +1,11 @@
+---
+
+- name: Install Homer
+  ansible.builtin.include_tasks:
+    file: roles/docker_homer/tasks/install.yml
+  when: homer_deployment == 'install'
+
+- name: Remove Homer
+  ansible.builtin.include_tasks:
+    file: roles/docker_homer/tasks/remove.yml
+  when: homer_deployment == 'remove'

@@ -1,0 +1,13 @@
+homer_deployment: install
+
+# https://docs.linuxserver.io/general/understanding-puid-and-pgid
+puid: 1000
+pgid: 1000
+
+home_dir: /home/horia
+
+# Homer configuration vars
+#########################
+homer_image: 'b4bz/homer'
+homer_config_dir: '/etc/homer/assets'
+homer_home_dir: "{{ home_dir }}/homer/"

@@ -1,0 +1,61 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ homer_home_dir }}"
+    - "{{ homer_config_dir }}"
+
+- name: Copy Homer docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ homer_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
+
+- name: Copy Homer config file
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ homer_config_dir }}/"
+    owner: horia
+    group: horia
+    mode: '0644'
+  with_fileglob:
+    - roles/docker_homer/files/*.yml
+    - roles/docker_homer/files/*.dist
+    - roles/docker_homer/files/*.sample
+
+- name: Copy Homer config directories
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ homer_config_dir }}/tools/"
+    owner: horia
+    group: horia
+    mode: '0644'
+  with_items:
+    - "roles/docker_homer/files/tools/"
+
+- name: Copy Homer config directories
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ homer_config_dir }}/icons/"
+    owner: horia
+    group: horia
+    mode: '0644'
+  with_items:
+    - "roles/docker_homer/files/icons/"
+
+- name: Start Homer container using docker compose file
+  community.docker.docker_compose:
+    project_src: "{{ homer_home_dir }}"
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

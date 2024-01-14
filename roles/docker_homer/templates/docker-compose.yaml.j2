@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  homer:
+    image: {{ homer_image }}
+    container_name: homer
+    volumes:
+      - {{ homer_config_dir }}:/www/assets
+    ports:
+      - 8080:8080
+    user: {{ puid }}:{{ pgid }}
+    environment:
+      - INIT_ASSETS=1 # default
+    restart: unless-stopped
