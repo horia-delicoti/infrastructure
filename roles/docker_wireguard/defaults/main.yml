@@ -1,0 +1,14 @@
+wireguard_deployment: install_client
+
+# https://docs.linuxserver.io/general/understanding-puid-and-pgid
+puid: 1000
+pgid: 1000
+timezone: 'Europe/London'
+
+home_dir: /home/horia
+wireguard_home_dir: "{{ home_dir }}/wireguard"
+
+# Wireguard configuration vars
+#########################
+wireguard_image: 'linuxserver/wireguard'
+wireguard_config_dir: "/etc/wireguard"

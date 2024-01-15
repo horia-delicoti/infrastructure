@@ -1,0 +1,16 @@
+---
+
+- name: Install Wireguard client
+  ansible.builtin.include_tasks:
+    file: roles/docker_wireguard/tasks/install_client.yml
+  when: wireguard_deployment == 'install_client'
+
+- name: Install Wireguard server
+  ansible.builtin.include_tasks:
+    file: roles/docker_wireguard/tasks/install_server.yml
+  when: wireguard_deployment == 'install_server'
+
+- name: Remove Wireguard
+  ansible.builtin.include_tasks:
+    file: roles/docker_wireguard/tasks/remove.yml
+  when: wireguard_deployment == 'remove'

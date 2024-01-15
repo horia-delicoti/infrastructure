@@ -1,0 +1,13 @@
+---
+- name: Stopping Wireguard docker container
+  community.docker.docker_compose:
+    project_src: "{{ wireguard_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ wireguard_config_dir }}"
+    - "{{ wireguard_home_dir }}"

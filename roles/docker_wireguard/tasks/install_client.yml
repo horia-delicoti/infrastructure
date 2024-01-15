@@ -1,0 +1,49 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ wireguard_home_dir }}"
+    - "{{ wireguard_config_dir }}"
+
+- name: Copy Wireguard docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ wireguard_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
+
+- name: Copy Wireguard config file
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ wireguard_config_dir }}/"
+    owner: horia
+    group: horia
+    mode: '0600'
+  with_fileglob:
+    - roles/docker_wireguard/files/wg0.conf
+
+- name: Copy Health check script for wireguard tunnel
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ wireguard_home_dir }}"
+    owner: horia
+    group: horia
+    mode: '0744'
+  with_items:
+    - "roles/docker_wireguard/files/health_check.sh"
+
+- name: Start Wireguard container using docker compose file
+  community.docker.docker_compose:
+    project_src: "{{ wireguard_home_dir }}"
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

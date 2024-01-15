@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  wireguard:
+    image: {{ wireguard_image }}
+    container_name: wireguard
+    network_mode: bridge
+    volumes:
+      - '{{ wireguard_config_dir }}:/config'
+      - '/lib/modules:/lib/modules:ro'
+      - '{{ wireguard_home_dir }}/health_check.sh:/health_check.sh'
+    ports:
+      - 8112:8112
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    healthcheck:
+      test: ["CMD", "/bin/bash", "/health_check.sh"]
+      interval: 120s
+      retries: 3
+      timeout: 10s
+    restart: unless-stopped
