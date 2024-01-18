@@ -1,40 +1,35 @@
 ---
-- name: Create application user
-  ansible.builtin.user:
-    name: node_exporter
-    create_home: false
-    shell: /sbin/nologin
-  register: created_node_exporter_user
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ node_exporter_home_dir }}"
 
-- name: Display created users
-  ansible.builtin.debug:
-    msg: "User: uid:{{ created_node_exporter_user.uid }} name:{{ created_node_exporter_user.name }} group:{{ created_node_exporter_user.group }}"
-
-- name: Docker pull node_exporter image
-  community.docker.docker_image:
-    name: "{{ node_exporter_docker_image }}"
-    source: pull
-
-- name: Create systemd service
+- name: Copy Node Exporter docker compose file
   ansible.builtin.template:
-    src: node-exporter.service.j2
-    dest: /etc/systemd/system/node-exporter.service
-    owner: node_exporter
-    group: node_exporter
-    mode: "0644"
-  notify: Restart node-exporter service
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ node_exporter_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
 
-- name: Start and enable service
-  ansible.builtin.systemd:
-    name: node-exporter
-    state: started
-    enabled: true
-    daemon_reload: true
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ node_exporter_home_dir }}"
+    files:
+    - docker-compose.yaml
+  register: output
 
-- name: Force all notified handlers to run at this point
-  ansible.builtin.meta: flush_handlers
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output
 
-- name: Wait for service to become available
+- name: Wait for Node Exporter service to become available
   ansible.builtin.uri:
     url: "http://localhost:{{ node_exporter_port }}/"
   register: result
