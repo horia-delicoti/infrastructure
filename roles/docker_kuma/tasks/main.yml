@@ -1,0 +1,11 @@
+---
+
+- name: Install Kuma
+  ansible.builtin.include_tasks:
+    file: roles/docker_kuma/tasks/install.yml
+  when: kuma_deployment == 'install'
+
+- name: Remove Kuma
+  ansible.builtin.include_tasks:
+    file: roles/docker_kuma/tasks/remove.yml
+  when: kuma_deployment == 'remove'

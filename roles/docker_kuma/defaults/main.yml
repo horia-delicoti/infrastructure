@@ -1,0 +1,8 @@
+kuma_deployment: install
+
+kuma_home_dir: /home/horia/kuma
+
+# Homebox configuration vars
+#################################
+kuma_image: louislam/uptime-kuma:latest
+kuma_config_dir: /etc/kuma

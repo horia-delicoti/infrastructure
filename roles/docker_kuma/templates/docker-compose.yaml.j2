@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  uptime-kuma:
+    image: {{ kuma_image }}
+    container_name: kuma
+    volumes:
+      - {{ kuma_config_dir }}:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock # to monitor docker containers
+    ports:
+      # <Host Port>:<Container Port>
+      - 3001:3001
+    restart: unless-stopped
