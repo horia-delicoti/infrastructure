@@ -1,125 +1,92 @@
-- name: Create application user
-  ansible.builtin.user:
-    name: grafana
-    create_home: false
-    shell: /sbin/nologin
-  register: created_grafana_user
-
-- name: Display created users
-  ansible.builtin.debug:
-    msg: "User: uid:{{ created_grafana_user.uid }} name:{{ created_grafana_user.name }} group:{{ created_grafana_user.group }}"
-
-- name: Create config directories
+---
+- name: Create required directories
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: grafana
-    group: grafana
-    mode: "0755"
-  loop:
-    - "{{ grafana_etc_path }}"
-    - "{{ grafana_etc_path }}/dashboards"
-    - "{{ grafana_etc_path }}/provisioning"
-    - "{{ grafana_etc_path }}/provisioning/dashboards"
-    - "{{ grafana_etc_path }}/provisioning/datasources"
-    - "{{ grafana_etc_path }}/provisioning/notifiers"
-    - "{{ grafana_etc_path }}/provisioning/plugins"
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ grafana_home_dir }}"
+    - "{{ grafana_data_dir }}"
+    - "{{ grafana_config_dir }}"
+    - "{{ grafana_config_dir }}/dashboards"
+    - "{{ grafana_config_dir }}/provisioning"
+    - "{{ grafana_config_dir }}/provisioning/dashboards"
+    - "{{ grafana_config_dir }}/provisioning/datasources"
+    - "{{ grafana_config_dir }}/provisioning/notifiers"
+    - "{{ grafana_config_dir }}/provisioning/plugins"
+    - "{{ grafana_config_dir }}/provisioning/alerting"
+    - "{{ grafana_config_dir }}/provisioning/access-control"
 
-- name: Create data directory
-  ansible.builtin.file:
-    path: "{{ grafana_data_path }}"
-    state: directory
-    owner: grafana
-    group: grafana
-    mode: "0775"
+- name: Copy grafana docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ grafana_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
 
-- name: Create backup directory
-  ansible.builtin.file:
-    path: "{{ grafana_backup_path }}"
-    state: directory
-    owner: grafana
-    group: grafana
-    mode: "0775"
-
-- name: Create service configuration
+- name: Create grafana configuration file
   ansible.builtin.template:
     src: grafana.ini.j2
-    dest: "{{ grafana_etc_path }}/grafana.ini"
-    owner: grafana
-    group: grafana
+    dest: "{{ grafana_config_dir }}/grafana.ini"
+    owner: horia
+    group: horia
     mode: "0644"
   no_log: false
 
 - name: Define environment variables
   ansible.builtin.template:
     src: grafana.env.j2
-    dest: /etc/grafana.env
-    owner: grafana
-    group: grafana
+    dest: "{{ grafana_config_dir }}/grafana.env"
+    owner: horia
+    group: horia
     mode: "0644"
-  notify: Restart grafana service
 
-- name: Create datasources configuration
-  ansible.builtin.template:
-    src: datasources.yml.j2
-    dest: "{{ grafana_etc_path }}/provisioning/datasources/datasources.yml"
-    owner: grafana
-    group: grafana
-    mode: "0644"
-  no_log: false
+- name: Copy grafana config file
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ grafana_config_dir }}/"
+    owner: horia
+    group: horia
+    mode: '0644'
+  with_fileglob:
+    - roles/docker_grafana/files/ldap.toml
 
 - name: Create dashboards configuration
   ansible.builtin.template:
     src: dashboards.yml.j2
-    dest: "{{ grafana_etc_path }}/provisioning/dashboards/dashboards.yml"
-    owner: grafana
-    group: grafana
+    dest: "{{ grafana_config_dir }}/provisioning/dashboards/dashboards.yml"
+    owner: horia
+    group: horia
     mode: "0644"
 
 - name: Create dashboards
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: "{{ grafana_etc_path }}/dashboards"
-    owner: grafana
-    group: grafana
+    dest: "{{ grafana_config_dir }}/dashboards"
+    owner: horia
+    group: horia
     mode: "0644"
   with_fileglob:
     - roles/docker_grafana/files/dashboards/*.json
 
-- name: Define Docker container labels
-  ansible.builtin.template:
-    src: grafana.label.j2
-    dest: /etc/grafana.label
-    owner: grafana
-    group: grafana
-    mode: "0644"
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ grafana_home_dir }}"
+    files:
+    - docker-compose.yaml
+  register: output
 
-- name: Pull Docker image
-  community.docker.docker_image:
-    name: "{{ grafana_docker_image }}"
-    source: pull
-
-- name: Create systemd service
-  ansible.builtin.template:
-    src: grafana.service.j2
-    dest: /etc/systemd/system/grafana.service
-    owner: grafana
-    group: grafana
-    mode: "0644"
-
-- name: Start and enable service
-  ansible.builtin.systemd:
-    name: grafana
-    state: started
-    enabled: true
-    daemon_reload: true
-
-- name: Force all notified handlers to run at this point
-  ansible.builtin.meta: flush_handlers
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output
 
 - name: Wait for service to become available
   ansible.builtin.uri:
-    url: "http://localhost:{{ grafana_port }}/"
+    url: "http://{{ grafana_host }}:{{ grafana_port }}/"
   register: result
   until: result.status == 200
   retries: 60

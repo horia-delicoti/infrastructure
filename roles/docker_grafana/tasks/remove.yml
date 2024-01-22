@@ -1,0 +1,14 @@
+---
+- name: Stopping Grafana docker container
+  community.docker.docker_compose:
+    project_src: "{{ grafana_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ grafana_home_dir }}"
+    - "{{ grafana_data_dir }}"
+    - "{{ grafana_config_dir }}"

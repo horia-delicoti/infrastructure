@@ -1,3 +1,5 @@
+---
+
 - name: Install Grafana
   ansible.builtin.include_tasks:
     file: roles/docker_grafana/tasks/install.yml
@@ -5,5 +7,5 @@
 
 - name: Remove Grafana
   ansible.builtin.include_tasks:
-    file: roles/docker_grafana/tasks/removal.yml
-  when: grafana_deployment == 'removal'
+    file: roles/docker_grafana/tasks/remove.yml
+  when: grafana_deployment == 'remove'
