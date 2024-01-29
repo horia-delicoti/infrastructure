@@ -1,0 +1,11 @@
+---
+
+- name: Install Deluge
+  ansible.builtin.include_tasks:
+    file: roles/docker_deluge/tasks/install.yml
+  when: deluge_deployment == 'install'
+
+- name: Remove Deluge
+  ansible.builtin.include_tasks:
+    file: roles/docker_deluge/tasks/remove.yml
+  when: deluge_deployment == 'remove'

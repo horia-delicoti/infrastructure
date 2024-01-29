@@ -1,0 +1,18 @@
+deluge_deployment: install
+
+deluge_home_dir: /home/horia/deluge
+
+# https://docs.linuxserver.io/general/understanding-puid-and-pgid
+puid: 1000
+pgid: 1000
+timezone: 'Europe/London'
+
+home_dir: /home/horia
+downloads_dir: "{{ home_dir }}/movies"
+tv_dir: "{{ home_dir }}/tv"
+
+# Deluge configuration vars
+###########################
+deluge_image: 'linuxserver/deluge:latest'
+deluge_config_dir: /etc/deluge
+wireguard_home_dir: '{{ home_dir }}/wireguard'

@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  deluge:
+    image: {{ deluge_image }}
+    container_name: deluge
+    network_mode: container:wireguard
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+      - DELUGE_LOGLEVEL=error #optional
+    volumes:
+      - {{ deluge_config_dir }}:/config
+      - {{ downloads_dir }}:/movies
+      - {{ tv_dir }}:/tv
+      - {{ wireguard_home_dir}}/health_check.sh:/health_check.sh
+   #ports:
+   #  - 8112:8112
+   #  - 6881:6881
+   #  - 6881:6881/udp
+   #  - 58846:58846
+    healthcheck:
+      test: ["CMD", "/bin/bash", "/health_check.sh"]
+      interval: 120s
+      retries: 3
+      timeout: 10s
+    restart: unless-stopped

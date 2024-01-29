@@ -1,0 +1,41 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ deluge_home_dir }}"
+    - "{{ deluge_config_dir }}"
+
+- name: Copy Deluge docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ deluge_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
+
+- name: Copy deluge config file
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deluge_config_dir }}/"
+    owner: horia
+    group: horia
+    mode: '0644'
+  with_fileglob:
+    - roles/docker_deluge/files/core.conf
+
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ deluge_home_dir }}"
+    files:
+    - docker-compose.yaml
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output
