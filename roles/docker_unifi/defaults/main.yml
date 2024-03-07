@@ -4,9 +4,9 @@ puid: 1000
 pgid: 1000
 timezone: 'Europe/Bucharest'
 
-home_dir: "/home/horia"
+unifi_home_dir: "/home/horia/unifi"
 
 # Unifi configuration vars
 ##########################
-unifi_image: 'lscr.io/linuxserver/unifi-controller:latest'
+unifi_image: 'lscr.io/linuxserver/unifi-network-application:latest'
 unifi_config_dir: /etc/unifi

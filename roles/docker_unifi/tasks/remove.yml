@@ -1,0 +1,13 @@
+---
+- name: Stopping Unifi docker container
+  community.docker.docker_compose:
+    project_src: "{{ unifi_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ unifi_home_dir }}"
+    - "{{ unifi_config_dir }}"

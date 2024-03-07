@@ -4,3 +4,8 @@
   ansible.builtin.include_tasks:
     file: roles/docker_unifi/tasks/install.yml
   when: unifi_deployment == 'install'
+
+- name: Remove Unifi
+  ansible.builtin.include_tasks:
+    file: roles/docker_unifi/tasks/remove.yml
+  when: unifi_deployment == 'remove'
