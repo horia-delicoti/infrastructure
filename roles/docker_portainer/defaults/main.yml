@@ -1,0 +1,9 @@
+portainer_deployment: install
+
+portainer_home_dir: /home/horia/portainer
+home_dir: /home/horia
+
+# Portainer configuration vars
+###########################
+portainer_image: 'portainer/portainer-ce:latest'
+portainer_config_dir: /etc/portainer

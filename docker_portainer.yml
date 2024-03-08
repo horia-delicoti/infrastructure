@@ -1,0 +1,6 @@
+- name: Install Portainer
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_portainer

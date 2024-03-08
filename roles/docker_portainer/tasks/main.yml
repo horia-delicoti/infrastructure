@@ -1,0 +1,11 @@
+---
+
+- name: Install Portainer
+  ansible.builtin.include_tasks:
+    file: roles/docker_portainer/tasks/install.yml
+  when: portainer_deployment == 'install'
+
+- name: Remove Portainer
+  ansible.builtin.include_tasks:
+    file: roles/docker_portainer/tasks/remove.yml
+  when: portainer_deployment == 'remove'

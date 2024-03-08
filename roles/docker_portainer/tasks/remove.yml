@@ -1,0 +1,13 @@
+---
+- name: Stopping Portainer docker container
+  community.docker.docker_compose:
+    project_src: "{{ portainer_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ portainer_home_dir }}"
+    - "{{ portainer_config_dir }}"
