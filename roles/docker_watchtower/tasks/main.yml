@@ -1,0 +1,11 @@
+---
+
+- name: Install Watchtower
+  ansible.builtin.include_tasks:
+    file: roles/docker_watchtower/tasks/install.yml
+  when: watchtower_deployment == 'install'
+
+- name: Remove Watchtower
+  ansible.builtin.include_tasks:
+    file: roles/docker_watchtower/tasks/remove.yml
+  when: watchtower_deployment == 'remove'

@@ -1,0 +1,7 @@
+watchtower_deployment: install
+
+watchtower_home_dir: /home/horia/watchtower
+
+# Watchtower configuration vars
+###########################
+watchtower_image: 'containrrr/watchtower'

@@ -1,0 +1,12 @@
+---
+- name: Stopping Watchtower docker container
+  community.docker.docker_compose:
+    project_src: "{{ watchtower_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ watchtower_home_dir }}"
