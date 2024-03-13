@@ -11,10 +11,10 @@
     - "{{ adguard_config_dir }}"
     - "{{ adguard_work_dir }}"
 
-- name: Copy AdGuoard docker compose file
+- name: Copy AdGuard docker compose file
   ansible.builtin.template:
     force: true
-    src: "docker-compose.adguard.yaml.j2"
+    src: "docker-compose.yaml.j2"
     dest: "{{ adguard_home_dir }}/docker-compose.yaml"
     owner: horia
     group: horia

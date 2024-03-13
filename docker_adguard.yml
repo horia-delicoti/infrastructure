@@ -3,5 +3,4 @@
   become: true
 
   roles:
-    - role: docker_server
     - role: docker_adguard
