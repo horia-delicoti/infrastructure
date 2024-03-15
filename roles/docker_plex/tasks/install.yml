@@ -11,7 +11,8 @@
     - "{{ plex_movies_dir }}"
     - "{{ plex_tv_dir }}"
     - "{{ plex_config_dir }}"
-    - "{{ plex_kids_dir }}"
+    - "{{ plex_animations_dir }}"
+    - "{{ plex_fitness_dir }}"
 
 - name: Copy Plex docker compose file
   ansible.builtin.template:

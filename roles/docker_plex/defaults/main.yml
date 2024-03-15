@@ -11,7 +11,8 @@ home_dir: /home/horia
 plex_movies_dir: "{{ home_dir }}/movies"
 plex_tv_dir: "{{ home_dir }}/tv"
 plex_music_dir: "{{ home_dir }}/music"
-plex_kids_dir: "{{ home_dir }}/kids"
+plex_animations_dir: "{{ home_dir }}/animations"
+plex_fitness_dir: "{{ home_dir }}/fitness"
 
 # Plex configuration vars
 #########################

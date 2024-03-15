@@ -15,7 +15,8 @@ services:
       - {{ plex_tv_dir }}:/tv
       - {{ plex_movies_dir }}:/movies
       - {{ plex_music_dir }}:/music
-      - {{ plex_kids_dir }}:/kids
+      - {{ plex_animations_dir }}:/animations
+      - {{ plex_fitness_dir }}:/fitness
     #ports:
     #  - 32400:32400
     restart: unless-stopped
