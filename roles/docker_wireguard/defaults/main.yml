@@ -12,3 +12,7 @@ wireguard_home_dir: "{{ home_dir }}/wireguard"
 #########################
 wireguard_image: 'linuxserver/wireguard'
 wireguard_config_dir: "/etc/wireguard"
+
+# Wireguard server config vars
+peers: macbook,iphone,deluge
+internal_subnet: 10.13.13.0

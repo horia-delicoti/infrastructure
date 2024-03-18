@@ -1,5 +1,19 @@
 # How to install wireguard
 
+## Getting started
+
+### Server
+
+```sh
+ansible-playbook docker_wireguard.yml --extra-vars "wireguard_deployment=install_server ddns_server_url=alias.domain.com" -u horia -K --limit rpi5
+```
+
+### Client
+
+```sh
+ansible-playbook docker_wireguard.yml --extra-vars "wireguard_deployment=install_client" -u horia -K --limit rpi3
+```
+
 ## Check IP within server
 
 ```sh

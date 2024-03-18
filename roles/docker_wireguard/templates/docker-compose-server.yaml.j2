@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  wireguard:
+    image: {{ wireguard_image }}
+    container_name: wireguard
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+      - SERVERURL= {{ ddns_server_url }} #set to auto if server has static IP, otherwise use a DDNS hostname
+      - SERVERPORT=51822
+      - PEERS={{ peers }}
+      - PEERDNS=auto
+      - INTERNAL_SUBNET={{ internal_subnet }} #optional
+      - ALLOWEDIPS=0.0.0.0/0 #full tunnel always
+    volumes:
+      - {{ wireguard_config_dir }}:/config
+      - /lib/modules:/lib/modules #do not change
+    ports:
+      - 51822:51820/udp
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    restart: unless-stopped
