@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  signal-cli-rest-api:
+    image: {{ signal_api_image }}
+    container_name: signal-api
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - MODE={{ signal_api_mode }} #supported modes: json-rpc, native, normal
+      #- AUTO_RECEIVE_SCHEDULE=0 22 * * * #enable this parameter on demand (see description below)
+    ports:
+      - "{{ signal_api_port }}:8080" #map docker port {{ signal_api_port}} to host port 8080.
+    volumes:
+      # map "signal-cli-config" folder on host system into docker container.
+      # the folder contains the password and cryptographic keys when a new number is registered
+      - "{{ signal_api_config_dir }}:/home/.local/share/signal-cli"
+    restart: unless-stopped

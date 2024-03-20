@@ -1,0 +1,11 @@
+---
+
+- name: Install Signal API
+  ansible.builtin.include_tasks:
+    file: roles/docker_signal_api/tasks/install.yml
+  when: signal_api_deployment == 'install'
+
+- name: Remove Signal API
+  ansible.builtin.include_tasks:
+    file: roles/docker_signal_api/tasks/remove.yml
+  when: signal_api_deployment == 'remove'

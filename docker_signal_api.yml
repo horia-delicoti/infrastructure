@@ -1,0 +1,6 @@
+- name: Install Signal API
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_signal_api
