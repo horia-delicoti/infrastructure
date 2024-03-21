@@ -1,0 +1,39 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ radarr_home_dir }}"
+    - "{{ radarr_config_dir }}"
+
+- name: Copy Radarr docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ radarr_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
+
+- name: Copy Radarr database file
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ radarr_config_dir }}/"
+    owner: horia
+    group: horia
+    mode: '0644'
+  with_items:
+    - "roles/docker_radarr/files/radarr.db"
+
+- name: Start Radarr container using docker compose file
+  community.docker.docker_compose:
+    project_src: "{{ radarr_home_dir }}"
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

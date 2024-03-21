@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  radarr:
+    image: {{ radarr_image }}
+    container_name: radarr
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+    volumes:
+      - {{ radarr_config_dir }}:/config # config files
+      - {{ movies_dir }}:/movies #optional
+      - {{ plex_animations_dir }}:/animations
+    ports:
+      - 7878:7878
+    restart: unless-stopped

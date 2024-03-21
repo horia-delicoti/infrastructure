@@ -1,0 +1,6 @@
+- name: Install Radarr
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_radarr

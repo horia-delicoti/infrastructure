@@ -1,0 +1,11 @@
+---
+
+- name: Install Radarr
+  ansible.builtin.include_tasks:
+    file: roles/docker_radarr/tasks/install.yml
+  when: radarr_deployment == 'install'
+
+- name: Remove Radarr
+  ansible.builtin.include_tasks:
+    file: roles/docker_radarr/tasks/remove.yml
+  when: radarr_deployment == 'remove'
