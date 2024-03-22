@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  sonarr:
+    image: {{ sonarr_image }}
+    container_name: sonarr
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+    volumes:
+      - {{ sonarr_config_dir }}:/config # config files
+      - {{ tv_dir }}:/tv # tv shows folder
+    ports:
+      - 8989:8989
+    restart: unless-stopped

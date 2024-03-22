@@ -1,0 +1,6 @@
+- name: Docker Sonarr
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_sonarr

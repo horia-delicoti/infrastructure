@@ -1,0 +1,11 @@
+---
+
+- name: Install Sonarr
+  ansible.builtin.include_tasks:
+    file: roles/docker_sonarr/tasks/install.yml
+  when: sonarr_deployment == 'install'
+
+- name: Remove Sonarr
+  ansible.builtin.include_tasks:
+    file: roles/docker_sonarr/tasks/remove.yml
+  when: sonarr_deployment == 'remove'

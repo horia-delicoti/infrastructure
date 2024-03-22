@@ -1,0 +1,13 @@
+---
+- name: Stopping Sonarr docker container
+  community.docker.docker_compose:
+    project_src: "{{ sonarr_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ sonarr_home_dir }}"
+    - "{{ sonarr_config_dir }}"
