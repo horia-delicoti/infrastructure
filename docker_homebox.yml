@@ -1,0 +1,6 @@
+- name: Docker Homebox
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_homebox

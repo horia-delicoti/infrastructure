@@ -1,0 +1,41 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ homebox_home_dir }}"
+    - "{{ homebox_config_dir }}"
+
+- name: Copy Homebox docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ homebox_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
+
+- name: Copy Homebox database file
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ homebox_config_dir }}/"
+    owner: horia
+    group: horia
+    mode: '0644'
+  with_fileglob:
+    - roles/docker_homebox/files/homebox.db
+
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ homebox_home_dir }}"
+    files:
+    - docker-compose.yaml
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

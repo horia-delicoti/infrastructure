@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  homebox:
+    image: {{ homebox_image }}
+    container_name: homebox
+    environment:
+    - HBOX_LOG_LEVEL=info
+    - HBOX_LOG_FORMAT=text
+    - HBOX_WEB_MAX_UPLOAD_SIZE=10
+    volumes:
+      - {{ homebox_config_dir }}:/data/
+    ports:
+      - 3100:7745
+    restart: unless-stopped

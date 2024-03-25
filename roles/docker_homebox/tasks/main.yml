@@ -1,0 +1,11 @@
+---
+
+- name: Install Homebox
+  ansible.builtin.include_tasks:
+    file: roles/docker_homebox/tasks/install.yml
+  when: homebox_deployment == 'install'
+
+- name: Remove Homebox
+  ansible.builtin.include_tasks:
+    file: roles/docker_homebox/tasks/remove.yml
+  when: homebox_deployment == 'remove'

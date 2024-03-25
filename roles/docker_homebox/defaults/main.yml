@@ -1,0 +1,8 @@
+homebox_deployment: install
+
+homebox_home_dir: /home/horia/homebox
+
+# Homebox configuration vars
+#################################
+homebox_image: ghcr.io/hay-kot/homebox:latest
+homebox_config_dir: /etc/homebox
