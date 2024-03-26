@@ -1,0 +1,62 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ prometheus_home_dir }}"
+    - "{{ prometheus_config_dir }}"
+    - "{{ prometheus_config_dir }}/rules"
+    - "{{ prometheus_config_dir }}/file_sd"
+    - "{{ prometheus_data_dir }}"
+
+- name: Copy Prometheus docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ prometheus_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
+
+- name: Create Prometheus configuration file
+  ansible.builtin.template:
+    dest: "{{ prometheus_config_dir }}/prometheus.yml"
+    force: true
+    src: prometheus-config.yml.j2
+    owner: horia
+    group: horia
+    mode: "0755"
+
+- name: Configure Prometheus static targets
+  ansible.builtin.copy:
+    content: |
+      {{ item.value | to_nice_yaml(indent=2, sort_keys=False) }}
+    dest: "{{ prometheus_config_dir }}/file_sd/{{ item.key }}.yml"
+    force: true
+    owner: horia
+    group: horia
+    mode: "0640"
+  with_dict: "{{ prometheus_targets }}"
+  when: prometheus_targets != {}
+
+- name: Alerting rules file
+  ansible.builtin.template:
+    src: "alert.rules.j2"
+    dest: "{{ prometheus_config_dir }}/rules/ansible_managed.rules"
+    owner: horia
+    group: horia
+    mode: "0640"
+  when:
+    - prometheus_alert_rules != []
+
+# name: Wait for service to become available
+# ansible.builtin.uri:
+#   url: "http://localhost:{{ prometheus_port }}/"
+# register: result
+# until: result.status == 200
+# retries: 60
+# delay: 1

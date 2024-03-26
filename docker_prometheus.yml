@@ -1,0 +1,6 @@
+- name: Docker Prometheus
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_prometheus

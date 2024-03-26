@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  prometheus:
+    image: {{ prometheus_image }}
+    container_name: prometheus
+    user: {{ puid }}:{{ pgid }}
+    volumes:
+      - {{ prometheus_config_dir }}:/etc/prometheus
+      - {{ prometheus_data_dir }}:/prometheus
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    restart: unless-stopped
