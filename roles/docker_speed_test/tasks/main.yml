@@ -1,0 +1,11 @@
+---
+
+- name: Install Speed Test Tracker
+  ansible.builtin.include_tasks:
+    file: roles/docker_speed_test/tasks/install.yml
+  when: speed_test_deployment == 'install'
+
+- name: Remove Speed Test Tracker
+  ansible.builtin.include_tasks:
+    file: roles/docker_speed_test/tasks/remove.yml
+  when: speed_test_deployment == 'remove'

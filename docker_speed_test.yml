@@ -1,0 +1,6 @@
+- name: Install Speed Test Tracker
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_speed_test

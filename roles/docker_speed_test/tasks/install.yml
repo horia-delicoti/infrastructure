@@ -1,0 +1,31 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ speed_test_home_dir }}"
+    - "{{ speed_test_config_dir }}"
+
+- name: Copy speed test docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ speed_test_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
+
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ speed_test_home_dir }}"
+    files:
+    - docker-compose.yaml
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

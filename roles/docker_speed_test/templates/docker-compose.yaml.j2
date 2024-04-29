@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  speedtest-tracker:
+    image: {{ speed_test_image }}
+    container_name: speedtest-tracker
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+      - DB_CONNECTION=sqlite
+    volumes:
+      - {{ speed_test_config_dir }}:/config
+    ports:
+      - 8085:80
+    restart: unless-stopped
