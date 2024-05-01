@@ -1,0 +1,50 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ calibre_home_dir }}"
+    - "{{ calibre_config_dir }}"
+    - "{{ calibre_books_dir }}"
+
+- name: Copy Calibre docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ calibre_home_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"
+
+- name: Copy application configuration database
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ calibre_config_dir }}/"
+    owner: horia
+    group: horia
+    mode: '0644'
+  with_fileglob:
+    - roles/docker_calibre/files/app.db
+
+- name: Copy calibre metadata database and books
+  ansible.builtin.copy:
+    src: "roles/docker_calibre/files/books"
+    dest: "{{ calibre_home_dir }}"
+    owner: horia
+    group: horia
+    mode: '0644'
+
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ calibre_home_dir }}"
+    files:
+    - docker-compose.yaml
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

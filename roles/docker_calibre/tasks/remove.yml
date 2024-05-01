@@ -1,0 +1,13 @@
+---
+- name: Stopping Calibre docker container
+  community.docker.docker_compose:
+    project_src: "{{ calibre_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ calibre_home_dir }}"
+    - "{{ calibre_config_dir }}"

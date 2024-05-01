@@ -1,0 +1,6 @@
+- name: Install Calibre
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_calibre

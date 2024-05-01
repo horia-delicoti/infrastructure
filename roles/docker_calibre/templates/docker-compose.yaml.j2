@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  calibre-web:
+    image: {{ calibre_image }}
+    container_name: calibre
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+      - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
+      - OAUTHLIB_RELAX_TOKEN_SCOPE=1 #optional
+    volumes:
+      - {{ calibre_config_dir }}:/config
+      - /home/horia/calibre/books:/books
+    ports:
+      - 8083:8083
+    restart: unless-stopped

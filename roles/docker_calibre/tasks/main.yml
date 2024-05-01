@@ -1,0 +1,11 @@
+---
+
+- name: Install Calibre
+  ansible.builtin.include_tasks:
+    file: roles/docker_calibre/tasks/install.yml
+  when: calibre_deployment == 'install'
+
+- name: Remove Calibre
+  ansible.builtin.include_tasks:
+    file: roles/docker_calibre/tasks/remove.yml
+  when: calibre_deployment == 'remove'

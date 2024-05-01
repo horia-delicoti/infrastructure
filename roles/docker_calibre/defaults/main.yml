@@ -1,0 +1,14 @@
+calibre_deployment: install
+
+calibre_home_dir: /home/horia/calibre
+
+# https://docs.linuxserver.io/general/understanding-puid-and-pgid
+puid: 1000
+pgid: 1000
+timezone: 'Europe/London'
+
+# Calibre configuration vars
+###########################
+calibre_image: 'lscr.io/linuxserver/calibre-web:latest'
+calibre_config_dir: /etc/calibre
+calibre_books_dir: "{{ calibre_home_dir }}/books"
