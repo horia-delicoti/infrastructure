@@ -1,9 +1,25 @@
-version: "3.8"
+version: {{ compose_version }}
 
 services:
   watchtower:
     image: {{ watchtower_image }}
     container_name: watchtower
+    environment:
+      - TZ={{ timezone }}
+      - WATCHTOWER_CLEANUP={{ watchtower_cleanup }}
+      - WATCHTOWER_DEBUG={{ watchtower_debug }}
+      - WATCHTOWER_SCHEDULE={{ watchtower_schedule }}
+      - WATCHTOWER_DISABLE_CONTAINERS={{ watchtower_disable_containers }}
+      - WATCHTOWER_LOG_FORMAT=pretty
+      - WATCHTOWER_INCLUDE_RESTARTING=true # Restart containers after update
+      - WATCHTOWER_INCLUDE_STOPPED=false # update stopped containers
+      - WATCHTOWER_HTTP_API_METRICS={{ watchtower_http_api_metrics }}
+      - WATCHTOWER_HTTP_API_TOKEN={{ watchtower_http_api_token }} # command: "openssl rand -base64 32"
+      - WATCHTOWER_NOTIFICATIONS_LEVEL={{ watchtower_notifications_level }}
+      - WATCHTOWER_NOTIFICATION_TITLE_TAG={{ watchtower_notification_title_tag }}
+      - WATCHTOWER_NOTIFICATION_URL={{ watchtower_notification_url }}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - {{ watchtower_port }}:8080 # Expose HTTP API on port {{ watchtower_port }}
     restart: unless-stopped
