@@ -1,4 +1,4 @@
-version: {{ compose_version }}
+version: "{{ compose_version }}"
 
 services:
   watchtower:
@@ -13,7 +13,7 @@ services:
       - WATCHTOWER_LOG_FORMAT=pretty
       - WATCHTOWER_INCLUDE_RESTARTING=true # Restart containers after update
       - WATCHTOWER_INCLUDE_STOPPED=false # update stopped containers
-      - WATCHTOWER_HTTP_API_METRICS={{ watchtower_http_api_metrics }}
+      - WATCHTOWER_HTTP_API_METRICS={{ watchtower_http_api_metrics }} # https://containrrr.dev/watchtower/metrics/
       - WATCHTOWER_HTTP_API_TOKEN={{ watchtower_http_api_token }} # command: "openssl rand -base64 32"
       - WATCHTOWER_NOTIFICATIONS_LEVEL={{ watchtower_notifications_level }}
       - WATCHTOWER_NOTIFICATION_TITLE_TAG={{ watchtower_notification_title_tag }}

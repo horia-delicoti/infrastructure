@@ -1,7 +1,18 @@
 watchtower_deployment: install
 
-watchtower_home_dir: /home/horia/watchtower
+watchtower_home_dir: "{{ home_dir }}/watchtower"
 
 # Watchtower configuration vars
 ###########################
+watchtower_port: 8095
 watchtower_image: 'containrrr/watchtower'
+watchtower_cleanup: true
+watchtower_debug: false
+watchtower_disable_containers:
+watchtower_schedule: '0 0 18 1 */1 *' # At 18:00 on day-of-month 1 in every month
+
+watchtower_http_api_metrics: true
+
+watchtower_notifications_level: info # Possible values are: panic, fatal, error, warn, info, debug or trace.
+watchtower_notification_title_tag:
+watchtower_notification_report: true
