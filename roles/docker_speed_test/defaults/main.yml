@@ -1,13 +1,10 @@
 speed_test_deployment: install
 
-speed_test_home_dir: /home/horia/speed_test
-
-# https://docs.linuxserver.io/general/understanding-puid-and-pgid
-puid: 1000
-pgid: 1000
-timezone: 'Europe/London'
+speed_test_home_dir: "{{ home_dir }}/speed_test"
 
 # Speed Test configuration vars
 ###########################
 speed_test_image: 'lscr.io/linuxserver/speedtest-tracker:latest'
 speed_test_config_dir: /etc/speed_test
+speed_test_schedule: 0 7-22/2 * * *
+speed_test_prune_results_older_than: '30'
