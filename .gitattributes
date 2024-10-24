@@ -1,0 +1,2 @@
+*.db filter=lfs diff=lfs merge=lfs -text
+roles/docker_kuma/files/kuma.db filter=lfs diff=lfs merge=lfs -text
