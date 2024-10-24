@@ -1,6 +1,6 @@
 kuma_deployment: install
 
-kuma_home_dir: /home/horia/kuma
+kuma_home_dir: "{{ home_dir }}/kuma"
 
 # Homebox configuration vars
 #################################

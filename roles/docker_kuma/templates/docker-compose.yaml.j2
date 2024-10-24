@@ -1,4 +1,4 @@
-version: "3.8"
+version: "{{ compose_version }}"
 
 services:
   uptime-kuma:
@@ -8,6 +8,5 @@ services:
       - {{ kuma_config_dir }}:/app/data
       - /var/run/docker.sock:/var/run/docker.sock # to monitor docker containers
     ports:
-      # <Host Port>:<Container Port>
       - 3001:3001
     restart: unless-stopped

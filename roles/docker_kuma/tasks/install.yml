@@ -3,8 +3,8 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "755"
   with_items:
     - "{{ kuma_home_dir }}"
@@ -15,16 +15,16 @@
     force: true
     src: "docker-compose.yaml.j2"
     dest: "{{ kuma_home_dir }}/docker-compose.yaml"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "644"
 
 - name: Copy Kuma config file
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ kuma_config_dir }}/"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: '0644'
   with_fileglob:
     - roles/docker_kuma/files/kuma.db
