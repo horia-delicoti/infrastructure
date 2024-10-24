@@ -1,6 +1,14 @@
 ---
-version: "3.8"
+version: "{{ compose_version }}"
 services:
+  unifi-db:
+    image: {{ mongo_image}}
+    container_name: unifi-db
+    volumes:
+      - ./data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    restart: unless-stopped
+
   unifi-network-application:
     image: {{ unifi_image }}
     container_name: unifi
@@ -8,8 +16,8 @@ services:
       - PUID={{ puid }}
       - PGID={{ pgid }}
       - TZ={{ timezone }}
-      - MONGO_USER=unifi
-      - MONGO_PASS=
+      - MONGO_USER={{ mongo_user }}
+      - MONGO_PASS={{ mongo_pass }}
       - MONGO_HOST=unifi-db
       - MONGO_PORT=27017
       - MONGO_DBNAME=unifi

@@ -3,20 +3,29 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "755"
   with_items:
     - "{{ unifi_home_dir }}"
     - "{{ unifi_config_dir }}"
+    - "{{ mongo_db_data_dir }}"
 
 - name: Copy Unifi docker compose file
   ansible.builtin.template:
     force: true
     src: "docker-compose.yaml.j2"
     dest: "{{ unifi_home_dir }}/docker-compose.yaml"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "644"
+
+- name: Create init mongo configuration file
+  ansible.builtin.template:
+    src: init-mongo.js.j2
+    dest: "{{ unifi_home_dir }}/init-mongo.js"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "644"
 
 - name: Start container using docker compose
