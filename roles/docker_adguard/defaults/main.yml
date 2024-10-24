@@ -1,9 +1,12 @@
 adguard_deployment: install
 
-adguard_home_dir: /home/horia/adguard
+adguard_home_dir: "{{ home_dir }}/adguard"
 
 # AdGuard Home configuration vars
 #################################
 adguard_image: adguard/adguardhome
 adguard_config_dir: /etc/adguard/conf
 adguard_work_dir: /etc/adguard/work
+
+adguard_initial_port: 3002
+adguard_port: 83

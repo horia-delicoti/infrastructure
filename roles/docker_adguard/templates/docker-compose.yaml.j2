@@ -1,15 +1,15 @@
-version: "3"
+version: "{{ compose_version }}"
 services:
   adguardhome:
     image: {{ adguard_image }}
     container_name: adguardhome
     ports:
       - 53:53/tcp
-      - 53:53/udp
+      - 53:53/udp # for DNS server
+      - {{ adguard_port }}:80/tcp # port for the web interface
       - 784:784/udp
-      - 853:853/tcp
-      - 3002:3000/tcp
-      - 83:80/tcp
+      - 853:853/tcp #  DNS over TLS/HTTPS between your client and Adguard
+      - {{ adguard_initial_port }}:3000/tcp # for initial installation
     volumes:
       - {{ adguard_work_dir }}:/opt/adguardhome/work
       - {{ adguard_config_dir }}:/opt/adguardhome/conf
