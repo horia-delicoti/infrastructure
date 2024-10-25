@@ -3,8 +3,8 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "755"
   with_items:
     - "{{ homebox_home_dir }}"
@@ -15,19 +15,17 @@
     force: true
     src: "docker-compose.yaml.j2"
     dest: "{{ homebox_home_dir }}/docker-compose.yaml"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "644"
 
-- name: Copy Homebox database file
+- name: Copy Homebox database files
   ansible.builtin.copy:
-    src: "{{ item }}"
+    src: "roles/docker_homebox/files/"
     dest: "{{ homebox_config_dir }}/"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: '0644'
-  with_fileglob:
-    - roles/docker_homebox/files/homebox.db
 
 - name: Start container using docker compose
   community.docker.docker_compose:

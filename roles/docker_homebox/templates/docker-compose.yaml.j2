@@ -1,4 +1,4 @@
-version: "3.8"
+version: "{{ compose_version }}"
 
 services:
   homebox:
@@ -11,5 +11,5 @@ services:
     volumes:
       - {{ homebox_config_dir }}:/data/
     ports:
-      - 3100:7745
+      - {{ homebox_port }}:7745
     restart: unless-stopped
