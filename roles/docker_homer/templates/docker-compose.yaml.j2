@@ -1,4 +1,4 @@
-version: "3.8"
+version: "{{ compose_version }}"
 
 services:
   homer:
@@ -7,7 +7,7 @@ services:
     volumes:
       - {{ homer_config_dir }}:/www/assets
     ports:
-      - 8080:8080
+      - {{ homer_port }}:8080
     user: {{ puid }}:{{ pgid }}
     environment:
       - INIT_ASSETS=1 # default

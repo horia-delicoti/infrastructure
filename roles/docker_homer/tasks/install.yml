@@ -3,8 +3,8 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "755"
   with_items:
     - "{{ homer_home_dir }}"
@@ -15,16 +15,16 @@
     force: true
     src: "docker-compose.yaml.j2"
     dest: "{{ homer_home_dir }}/docker-compose.yaml"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "644"
 
 - name: Copy Homer config file
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ homer_config_dir }}/"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: '0644'
   with_fileglob:
     - roles/docker_homer/files/*.yml
@@ -35,8 +35,8 @@
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ homer_config_dir }}/tools/"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: '0644'
   with_items:
     - "roles/docker_homer/files/tools/"
@@ -45,8 +45,8 @@
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ homer_config_dir }}/icons/"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: '0644'
   with_items:
     - "roles/docker_homer/files/icons/"
