@@ -1,0 +1,9 @@
+alert_manager_deployment: install
+
+# Alert Manager configuration vars
+#################################
+alert_manager_home_dir: "{{ home_dir }}/alert_manager"
+alert_manager_port: 9093
+
+alert_manager_image: prom/alertmanager:latest
+alert_manager_config_dir: /etc/alert_manager

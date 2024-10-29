@@ -1,0 +1,40 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "755"
+  with_items:
+    - "{{ alert_manager_home_dir }}"
+    - "{{ alert_manager_config_dir }}"
+
+- name: Copy Alert Manager docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ alert_manager_home_dir }}/docker-compose.yaml"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "644"
+
+- name: Copy Alert Manager config file
+  ansible.builtin.template:
+    src: alertmanager.yaml.j2
+    dest: "{{ alert_manager_config_dir }}/alertmanager.yaml"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "0644"
+  notify: Restart alert manager
+
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ alert_manager_home_dir }}"
+    files:
+    - docker-compose.yaml
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

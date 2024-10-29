@@ -1,0 +1,7 @@
+- name: Restart Alert Manager Container
+  listen: "Restart alert manager"
+  become: true
+  community.docker.docker_container:
+    name: alertmanager
+    state: started
+    recreate: true

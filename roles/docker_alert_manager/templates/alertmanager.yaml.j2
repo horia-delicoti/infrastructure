@@ -1,0 +1,23 @@
+global:
+  resolve_timeout: 5m
+
+# Set up the Telegram bot notification
+receivers:
+  - name: 'telegram-notifier'
+    telegram_configs:
+      - send_resolved: true
+        bot_token: "{{ telegram_token }}"
+        chat_id: "{{ telegram_chat_id }}"
+        message: "{{ '[{{ .Status | toUpper }}] Alert: {{ .Annotations.summary }}\nDescription: {{ .Annotations.description }}\nSeverity: {{ .Labels.severity }}\nLabels: {{ .Labels }}' | tojson }}"
+
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 3h
+  receiver: 'telegram-notifier'
+
+  routes:
+    - match:
+        severity: critical
+      receiver: 'telegram-notifier'

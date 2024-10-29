@@ -1,0 +1,6 @@
+- name: Docker Alert Manager
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_alert_manager

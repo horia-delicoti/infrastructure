@@ -1,0 +1,14 @@
+version: "{{ compose_version }}"
+
+services:
+  alertmanager:
+    image: {{ alert_manager_image }}
+    container_name: alertmanager
+    volumes:
+      - {{ alert_manager_config_dir }}:/config
+      - {{ alert_manager_home_dir }}:/data
+    command:
+      - '--config.file=/config/alertmanager.conf'
+    ports:
+      - {{ alert_manager_port }}:9093
+    restart: unless-stopped

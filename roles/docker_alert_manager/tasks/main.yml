@@ -1,0 +1,11 @@
+---
+
+- name: Install Alert Manager
+  ansible.builtin.include_tasks:
+    file: roles/docker_alert_manager/tasks/install.yml
+  when: alert_manager_deployment == 'install'
+
+- name: Remove Alert Manager
+  ansible.builtin.include_tasks:
+    file: roles/docker_alert_manager/tasks/remove.yml
+  when: alert_manager_deployment == 'remove'
