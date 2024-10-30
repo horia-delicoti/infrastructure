@@ -1,9 +1,9 @@
 portainer_deployment: install
 
-portainer_home_dir: /home/horia/portainer
-home_dir: /home/horia
+portainer_home_dir: "{{ home_dir }}/portainer"
 
 # Portainer configuration vars
 ###########################
 portainer_image: 'portainer/portainer-ce:latest'
 portainer_config_dir: /etc/portainer
+portainer_port: 9443
