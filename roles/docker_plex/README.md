@@ -7,5 +7,5 @@ https://www.plex.tv/claim/
 ```
 
 ```sh
-ansible-playbook docker_plex.yml --extra-vars "plex_claim=claim-AAbbccc" -u <user> -K --limit <server>
+ansible-playbook docker_plex.yml --extra-vars "plex_claim=claim-AAbbccc" --limit <server>
 ```
