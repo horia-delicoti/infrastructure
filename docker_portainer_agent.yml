@@ -1,0 +1,6 @@
+- name: Install Portainer Agent
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_portainer_agent

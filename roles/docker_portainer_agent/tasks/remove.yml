@@ -1,0 +1,12 @@
+---
+- name: Stopping Portainer Agent docker container
+  community.docker.docker_compose:
+    project_src: "{{ portainer_agent_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ portainer_agent_home_dir }}"

@@ -1,0 +1,8 @@
+portainer_agent_deployment: install
+
+portainer_agent_home_dir: "{{ home_dir }}/portainer_agent"
+
+# Portainer Agent configuration vars
+###########################
+portainer_agent_image: 'portainer/agent:latest'
+portainer_agent_port: 9001

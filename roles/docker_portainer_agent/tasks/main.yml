@@ -1,0 +1,11 @@
+---
+
+- name: Install Portainer Agent
+  ansible.builtin.include_tasks:
+    file: roles/docker_portainer_agent/tasks/install.yml
+  when: portainer_agent_deployment == 'install'
+
+- name: Remove Portainer Agent
+  ansible.builtin.include_tasks:
+    file: roles/docker_portainer_agent/tasks/remove.yml
+  when: portainer_agent_deployment == 'remove'
