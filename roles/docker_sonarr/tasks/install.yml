@@ -3,8 +3,8 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "755"
   with_items:
     - "{{ sonarr_home_dir }}"
@@ -15,16 +15,16 @@
     force: true
     src: "docker-compose.yaml.j2"
     dest: "{{ sonarr_home_dir }}/docker-compose.yaml"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "644"
 
 - name: Copy Sonarr database file
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ sonarr_config_dir }}/"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: '0644'
   with_items:
     - "roles/docker_sonarr/files/sonarr.db"

@@ -1,4 +1,4 @@
-version: "3.8"
+version: "{{ compose_version }}"
 
 services:
   sonarr:
@@ -12,5 +12,5 @@ services:
       - {{ sonarr_config_dir }}:/config # config files
       - {{ tv_dir }}:/tv # tv shows folder
     ports:
-      - 8989:8989
+      - {{ sonarr_port }}:8989
     restart: unless-stopped
