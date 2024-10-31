@@ -3,77 +3,58 @@
 #     ansible.builtin.shell: curl -sSL https://get.docker.com | sh
 
 ---
-- name: Update all packages to their latest version
-  ansible.builtin.apt:
-    name: "*"
-    state: latest
-  tags:
-    - packages
 
 - name: Install aptitude
   ansible.builtin.apt:
     name: aptitude
     state: present
     update_cache: true
-  tags:
-    - docker
 
 - name: Install required system packages
   ansible.builtin.apt:
     pkg:
+      - vim
+      - git
       - apt-transport-https
       - ca-certificates
       - curl
+      - wget
+      - dnsutils
       - software-properties-common
       - python3-pip
       - virtualenv
       - python3-setuptools
+      - python3-docker
+      - docker-compose
     state: present
     update_cache: true
-  tags:
-    - docker
 
-- name: Add Docker GPG apt Key
+- name: Add Docker GPG Apt Key
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
-  tags:
-    - docker
 
 - name: Add Docker Repository
   ansible.builtin.apt_repository:
     repo: deb https://download.docker.com/linux/ubuntu focal stable
     state: present
-  tags:
-    - docker
 
-- name: Update apt and install docker-ce
+- name: Install docker-ce
   ansible.builtin.apt:
     name: docker-ce
     state: present
     update_cache: true
-  tags:
-    - docker
 
-- name: Install Docker Module for Python
-  ansible.builtin.pip:
-    name: docker
-  tags:
-    - docker
-
-- name: Ensure services are started
+- name: Ensure services are started and enabled
   ansible.builtin.service:
     name: "{{ item }}"
     state: started
     enabled: true
   with_items:
-    - docker
-  tags:
+    - sshd
     - docker
 
-- name: Add the user to group "docker" user {{ user }}
+- name: To group 'docker' add user '{{ owner }}'
   ansible.builtin.user:
-    name: "{{ user }}"
+    name: "{{ owner }}"
     group: docker
-  tags:
-    - docker
