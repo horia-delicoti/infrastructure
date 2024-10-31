@@ -44,4 +44,3 @@ MIT
 [server_setup_ubuntu]: https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-22-04
 [htpc-download-box]: https://github.com/sebgl/htpc-download-box
 [ansible-role-prometheus]: https://github.com/ome/ansible-role-prometheus
-[install_prometheus_rpi]: https://pimylifeup.com/raspberry-pi-prometheus/

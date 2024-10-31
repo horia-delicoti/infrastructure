@@ -1,6 +1,8 @@
 # <https://ansible-lint.readthedocs.io/rules/>
 
+# Offline mode disables installation of requirements.yml and schema refreshing
 offline: true
+
 warn_list:
 - command-instead-of-shell
 skip_list:
