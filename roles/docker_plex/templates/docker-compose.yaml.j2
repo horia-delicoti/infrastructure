@@ -12,11 +12,10 @@ services:
       - PLEX_CLAIM={{ plex_claim }}
     volumes:
       - {{ plex_config_dir }}:/config
-      - {{ plex_tv_dir }}:/tv
-      - {{ plex_movies_dir }}:/movies
-      - {{ plex_music_dir }}:/music
-      - {{ plex_animations_dir }}:/animations
-      - {{ plex_fitness_dir }}:/fitness
+      - {{ tv_dir }}:/tv
+      - {{ movies_dir }}:/movies
+      - {{ music_dir }}:/music
+      - {{ animations_dir }}:/animations
     #ports:
     #  - 32400:32400
     restart: unless-stopped

@@ -2,12 +2,6 @@ plex_deployment: install
 
 plex_home_dir: "{{ home_dir }}/plex"
 
-plex_movies_dir: "{{ home_dir }}/movies"
-plex_tv_dir: "{{ home_dir }}/tv"
-plex_music_dir: "{{ home_dir }}/music"
-plex_animations_dir: "{{ home_dir }}/animations"
-plex_fitness_dir: "{{ home_dir }}/fitness"
-
 # Plex configuration vars
 #########################
 plex_image: 'lscr.io/linuxserver/plex:latest'
