@@ -1,0 +1,8 @@
+---
+
+rpi4_host: 192.168.1.8
+
+# Watchtower configuration variables
+
+watchtower_notification_title_tag: rpi4
+watchtower_disable_containers: "unifi-db,unifi"
