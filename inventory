@@ -1,5 +1,5 @@
-[servers]
-ubuntu2204
-rpi3
-rpi4
+[uk]
 rpi5
+
+[galati]
+rpi4
