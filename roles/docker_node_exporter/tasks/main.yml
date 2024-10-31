@@ -6,5 +6,5 @@
 
 - name: Remove Node exporter docker container
   ansible.builtin.include_tasks:
-    file: roles/docker_node_exporter/tasks/removal.yml
-  when: node_exporter_deployment == 'removal'
+    file: roles/docker_node_exporter/tasks/remove.yml
+  when: node_exporter_deployment == 'remove'

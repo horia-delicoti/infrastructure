@@ -1,6 +1,6 @@
 node_exporter_deployment: install
 
-node_exporter_home_dir: /home/horia/node_exporter
+node_exporter_home_dir: "{{ home_dir }}/node_exporter"
 
 # Node Exporter configuration vars
 #################################

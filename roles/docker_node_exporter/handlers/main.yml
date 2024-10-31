@@ -1,6 +1,8 @@
 ---
-- name: Restart node-exporter service
-  ansible.builtin.systemd:
-    name: node-exporter
-    state: restarted
-    daemon_reload: true
+- name: Restart Node Exporter Container
+  listen: "Restart node exporter"
+  become: true
+  community.docker.docker_container:
+    name: node_exporter
+    state: started
+    recreate: true
