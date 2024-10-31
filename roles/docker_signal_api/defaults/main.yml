@@ -1,11 +1,6 @@
 signal_api_deployment: install
 
-signal_api_home_dir: /home/horia/signal_api
-
-# https://docs.linuxserver.io/general/understanding-puid-and-pgid
-puid: 1000
-pgid: 1000
-timezone: 'Europe/London'
+signal_api_home_dir: "{{ home_dir }}/signal_api"
 
 # Signal API configuration vars
 ###########################
