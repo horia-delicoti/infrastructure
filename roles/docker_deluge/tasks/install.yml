@@ -3,31 +3,41 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "755"
   with_items:
     - "{{ deluge_home_dir }}"
     - "{{ deluge_config_dir }}"
+    - "{{ movies_dir }}"
+    - "{{ tv_dir }}"
 
 - name: Copy Deluge docker compose file
   ansible.builtin.template:
     force: true
     src: "docker-compose.yaml.j2"
     dest: "{{ deluge_home_dir }}/docker-compose.yaml"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "644"
 
 - name: Copy deluge config file
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ deluge_config_dir }}/"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: '0644'
   with_fileglob:
     - roles/docker_deluge/files/core.conf
+
+- name: Copy Health check script for Wireguard tunnel
+  ansible.builtin.template:
+    src: health_check.sh.j2
+    dest: "{{ deluge_home_dir }}/health_check.sh"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "644"
 
 - name: Start container using docker compose
   community.docker.docker_compose:

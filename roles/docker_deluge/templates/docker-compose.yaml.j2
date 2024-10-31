@@ -1,4 +1,4 @@
-version: "3.8"
+version: "{{ compose_version }}"
 
 services:
   deluge:
@@ -12,9 +12,9 @@ services:
       - DELUGE_LOGLEVEL=error #optional
     volumes:
       - {{ deluge_config_dir }}:/config
-      - {{ downloads_dir }}:/movies
+      - {{ movies_dir }}:/movies
       - {{ tv_dir }}:/tv
-      - {{ wireguard_home_dir}}/health_check.sh:/health_check.sh
+      - {{ deluge_home_dir}}/health_check.sh:/health_check.sh
    #ports:
    #  - 8112:8112
    #  - 6881:6881
