@@ -1,0 +1,29 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: horia
+    group: horia
+    mode: "755"
+  with_items:
+    - "{{ plausible_config_dir }}"
+    - "{{ plausible_docker_compose_dir }}"
+
+- name: Create plausible configuration environment
+  ansible.builtin.template:
+    src: plausible-conf.env.j2
+    dest: "{{ plausible_docker_compose_dir }}/plausible-conf.env"
+    owner: horia
+    group: horia
+    mode: "0644"
+  no_log: false
+
+- name: Copy docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ plausible_docker_compose_dir }}/docker-compose.yaml"
+    owner: horia
+    group: horia
+    mode: "644"

@@ -1,0 +1,6 @@
+---
+
+- name: Install Plausible Analytics
+  ansible.builtin.include_tasks:
+    file: roles/docker_plausible/tasks/install.yml
+  when: plausible_deployment == 'install'

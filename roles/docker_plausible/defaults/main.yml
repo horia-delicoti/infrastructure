@@ -1,0 +1,12 @@
+plausible_deployment: install
+
+# Plausible Analytics configuration vars
+#################################
+plausible_image: plausible/analytics:v1.5
+plausible_db_image: postgres:14-alpine
+plausible_events_db_image: clickhouse/clickhouse-server:22.6-alpine
+plausible_config_dir: /etc/plausible
+plausible_docker_compose_dir: "{{ home_dir }}/plausible"
+
+plausible_base_url: "test"
+plausible_secret_key_base: "test"
