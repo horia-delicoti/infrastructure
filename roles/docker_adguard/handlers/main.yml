@@ -1,0 +1,7 @@
+- name: Restart AdGuard Container
+  listen: "Restart adguard"
+  become: true
+  community.docker.docker_container:
+    name: adguardhome
+    state: started
+    recreate: true

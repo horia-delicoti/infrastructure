@@ -29,6 +29,7 @@
     mode: '0644'
   with_fileglob:
     - roles/docker_caddy/files/Caddyfile
+  notify: Restart caddy
 
 - name: Start container using docker compose
   community.docker.docker_compose:

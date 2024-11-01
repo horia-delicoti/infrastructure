@@ -29,6 +29,7 @@
     mode: '0644'
   with_fileglob:
     - roles/docker_adguard/files/conf/AdGuardHome.yaml
+  notify: Restart adguard
 
 - name: Start container using docker compose
   community.docker.docker_compose:
