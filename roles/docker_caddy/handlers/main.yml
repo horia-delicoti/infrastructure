@@ -1,0 +1,7 @@
+- name: Restart Caddy Container
+  listen: "Restart caddy"
+  become: true
+  community.docker.docker_container:
+    name: caddy
+    state: started
+    recreate: true

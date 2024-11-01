@@ -1,0 +1,11 @@
+---
+
+- name: Install Caddy
+  ansible.builtin.include_tasks:
+    file: roles/docker_caddy/tasks/install.yml
+  when: caddy_deployment == 'install'
+
+- name: Remove Caddy
+  ansible.builtin.include_tasks:
+    file: roles/docker_caddy/tasks/remove.yml
+  when: caddy_deployment == 'remove'

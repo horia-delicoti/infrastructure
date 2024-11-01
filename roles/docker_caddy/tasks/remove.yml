@@ -1,0 +1,13 @@
+---
+- name: Stopping Caddy docker container
+  community.docker.docker_compose:
+    project_src: "{{ caddy_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ caddy_home_dir }}"
+    - "{{ caddy_config_dir }}"

@@ -1,0 +1,11 @@
+caddy_deployment: install
+
+caddy_home_dir: "{{ home_dir }}/caddy"
+scripts_home_dir: "{{ home_dir }}/scripts"
+
+# Caddy configuration vars
+###########################
+caddy_image: 'caddy:latest'
+caddy_config_dir: /etc/caddy
+caddy_data_dir: /etc/caddy/data
+caddy_file: /etc/caddy/CaddyFile

@@ -1,0 +1,15 @@
+version: "{{ compose_version }}"
+
+services:
+  caddy:
+    image: {{ caddy_image }}
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - {{ caddy_config_dir }}/Caddyfile:/etc/caddy/Caddyfile:ro
+      - {{ caddy_data_dir }}:/data
+      - {{ caddy_config_dir }}:/config
+      - {{ scripts_home_dir }}:/srv:ro
+    restart: unless-stopped

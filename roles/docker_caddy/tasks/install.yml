@@ -1,0 +1,42 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "755"
+  with_items:
+    - "{{ caddy_home_dir }}"
+    - "{{ caddy_config_dir }}"
+    - "{{ caddy_data_dir }}"
+
+- name: Copy Caddy docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ caddy_home_dir }}/docker-compose.yaml"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "644"
+
+- name: Copy Caddy config file
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ caddy_config_dir }}/"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: '0644'
+  with_fileglob:
+    - roles/docker_caddy/files/Caddyfile
+
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ caddy_home_dir }}"
+    files:
+    - docker-compose.yaml
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output
