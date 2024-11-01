@@ -1,0 +1,7 @@
+- name: Restart Signal Webhook Container
+  listen: "Restart signal webhook"
+  become: true
+  community.docker.docker_container:
+    name: signal-webhook
+    state: started
+    recreate: true

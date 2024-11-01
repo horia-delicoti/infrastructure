@@ -1,0 +1,12 @@
+version: "{{ compose_version }}"
+services:
+  signal-webhook:
+    image: {{ signal_webhook_image }} # Use a slim Python image
+    container_name: signal-webhook
+    volumes:
+      - ./webhook:/app  # Mount the local folder with your Python script
+    working_dir: /app
+    command: bash -c "pip install -r requirements.txt && python webhook.py"  # Install dependencies and run the script
+    ports:
+      - "{{ signal_webhook_port }}:5000"  # Expose port 5000 for the webhook
+    restart: unless-stopped

@@ -1,0 +1,11 @@
+---
+
+- name: Install Signal Webhook
+  ansible.builtin.include_tasks:
+    file: roles/docker_signal_webhook/tasks/install.yml
+  when: signal_webhook_deployment == 'install'
+
+- name: Remove Signal Webhook
+  ansible.builtin.include_tasks:
+    file: roles/docker_signal_webhook/tasks/remove.yml
+  when: signal_webhook_deployment == 'remove'

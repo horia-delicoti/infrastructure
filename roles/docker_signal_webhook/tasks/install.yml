@@ -1,0 +1,52 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "755"
+  with_items:
+    - "{{ signal_webhook_home_dir }}"
+    - "{{ signal_webhook_requirement }}"
+
+- name: Copy Signal Webhook docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ signal_webhook_home_dir }}/docker-compose.yaml"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "644"
+
+- name: Copy webhook python file
+  ansible.builtin.template:
+    force: true
+    src: "webhook.py.j2"
+    dest: "{{ signal_webhook_requirement }}/webhook.py"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "644"
+  notify: Restart signal webhook
+
+- name: Copy required files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ signal_webhook_requirement }}/"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: '0644'
+  with_fileglob:
+    - roles/docker_signal_webhook/files/requirements.txt
+  notify: Restart signal webhook
+
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ signal_webhook_home_dir }}"
+    files:
+    - docker-compose.yaml
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

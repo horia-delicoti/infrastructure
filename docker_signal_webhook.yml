@@ -1,0 +1,6 @@
+- name: Install Phython Webhook
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_signal_webhook

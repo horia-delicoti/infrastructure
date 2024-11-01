@@ -1,0 +1,48 @@
+import requests
+from flask import Flask, request
+
+app = Flask(__name__)
+
+SIGNAL_API_URL = "http://{{ rpi5_host }}:8090/v2/send"
+SIGNAL_API_PHONE_NUMBER = "{{ signal_phone_number }}"  # Replace with your Signal API phone number
+SIGNAL_RECIPIENT = "{{ signal_phone_number }}"  # Replace with the recipient's phone number
+
+def send_signal_message(message):
+    # Send a POST request to the Signal API to send a message
+    payload = {
+        "message": message,
+        "number": SIGNAL_API_PHONE_NUMBER,  # Your registered Signal phone number
+        "recipients": [SIGNAL_RECIPIENT]  # The recipient's phone number
+    }
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(SIGNAL_API_URL, json=payload, headers=headers)
+    
+    if response.status_code == 200:
+        print("Message sent successfully!")
+    else:
+        print(f"Failed to send message. Status code: {response.status_code}")
+        print(response.text)
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    data = request.get_json()
+    # Parse the Watchtower notification payload and extract useful information
+    if 'Entries' in data:
+        message = "\n".join(entry['Message'] for entry in data['Entries'])
+    else:
+        # Construct message based on the report, e.g., for successful updates
+        report = data.get('Report', {})
+        message = (
+            f"{len(report.get('Scanned', []))} Scanned, "
+            f"{len(report.get('Updated', []))} Updated, "
+            f"{len(report.get('Failed', []))} Failed"
+        )
+    
+    # Send the message via Signal
+    send_signal_message(message)
+    
+    return "Notification sent", 200
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port={{ signal_webhook_port }})

@@ -1,0 +1,9 @@
+signal_webhook_deployment: install
+
+signal_webhook_home_dir: "{{ home_dir }}/signal_webhook"
+signal_webhook_requirements: "{{ signal_webhook_home_dir }}/webhook"
+
+# Signal webhook configuration vars
+###########################
+signal_webhook_image: 'python:3.11-slim'  # Use a slim Python image
+signal_webhook_port: 5000

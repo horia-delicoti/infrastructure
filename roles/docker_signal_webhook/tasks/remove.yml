@@ -1,0 +1,12 @@
+---
+- name: Stopping Signal Webhook docker container
+  community.docker.docker_compose:
+    project_src: "{{ signal_webhook_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ signal_webhook_home_dir }}"
