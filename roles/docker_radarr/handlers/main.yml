@@ -1,0 +1,7 @@
+- name: Restart Radarr Container
+  listen: "Restart radarr"
+  become: true
+  community.docker.docker_container:
+    name: radarr
+    state: started
+    recreate: true

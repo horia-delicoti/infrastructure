@@ -3,8 +3,8 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "755"
   with_items:
     - "{{ radarr_home_dir }}"
@@ -15,19 +15,20 @@
     force: true
     src: "docker-compose.yaml.j2"
     dest: "{{ radarr_home_dir }}/docker-compose.yaml"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "644"
 
 - name: Copy Radarr database file
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ radarr_config_dir }}/"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: '0644'
   with_items:
     - "roles/docker_radarr/files/radarr.db"
+  notify: Restart radarr
 
 - name: Start Radarr container using docker compose file
   community.docker.docker_compose:

@@ -1,4 +1,4 @@
-version: "3.8"
+version: "{{ compose_version }}"
 
 services:
   radarr:
@@ -9,9 +9,9 @@ services:
       - PGID={{ pgid }}
       - TZ={{ timezone }}
     volumes:
-      - {{ radarr_config_dir }}:/config # config files
-      - {{ movies_dir }}:/movies #optional
-      - {{ plex_animations_dir }}:/animations
+      - {{ radarr_config_dir }}:/config
+      - {{ movies_dir }}:/movies
+      - {{ animations_dir }}:/animations
     ports:
-      - 7878:7878
+      - {{ radarr_port }}:7878
     restart: unless-stopped
