@@ -3,8 +3,8 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "755"
   with_items:
     - "{{ prometheus_home_dir }}"
@@ -18,8 +18,8 @@
     force: true
     src: "docker-compose.yaml.j2"
     dest: "{{ prometheus_home_dir }}/docker-compose.yaml"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "644"
 
 - name: Create Prometheus configuration file
@@ -27,8 +27,8 @@
     dest: "{{ prometheus_config_dir }}/prometheus.yml"
     force: true
     src: prometheus-config.yml.j2
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "0755"
 
 - name: Configure Prometheus static targets
@@ -37,8 +37,8 @@
       {{ item.value | to_nice_yaml(indent=2, sort_keys=False) }}
     dest: "{{ prometheus_config_dir }}/file_sd/{{ item.key }}.yml"
     force: true
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "0640"
   with_dict: "{{ prometheus_targets }}"
   when: prometheus_targets != {}
@@ -47,16 +47,27 @@
   ansible.builtin.template:
     src: "alert.rules.j2"
     dest: "{{ prometheus_config_dir }}/rules/ansible_managed.rules"
-    owner: horia
-    group: horia
+    owner: "{{ owner }}"
+    group: "{{ group }}"
     mode: "0640"
   when:
     - prometheus_alert_rules != []
 
-# name: Wait for service to become available
-# ansible.builtin.uri:
-#   url: "http://localhost:{{ prometheus_port }}/"
-# register: result
-# until: result.status == 200
-# retries: 60
-# delay: 1
+- name: Start container using docker compose
+  community.docker.docker_compose:
+    project_src: "{{ prometheus_home_dir }}"
+    files:
+    - docker-compose.yaml
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output
+
+- name: Wait for service to become available
+  ansible.builtin.uri:
+    url: "http://localhost:{{ prometheus_port }}/"
+  register: result
+  until: result.status == 200
+  retries: 60
+  delay: 1

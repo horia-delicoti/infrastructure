@@ -1,4 +1,4 @@
-version: '3.8'
+version: "{{ compose_version }}"
 
 services:
   prometheus:
@@ -10,5 +10,5 @@ services:
       - {{ prometheus_data_dir }}:/prometheus
     command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
     ports:
-      - 9090:9090
+      - {{ prometheus_port }}:9090
     restart: unless-stopped

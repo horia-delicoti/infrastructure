@@ -1,0 +1,14 @@
+---
+- name: Stopping Prometheus docker container
+  community.docker.docker_compose:
+    project_src: "{{ prometheus_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ prometheus_home_dir }}"
+    - "{{ prometheus_config_dir }}"
+    - "{{ prometheus_data_dir }}"

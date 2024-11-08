@@ -7,5 +7,5 @@
 
 - name: Remove Prometheus
   ansible.builtin.include_tasks:
-    file: roles/docker_prometheus/tasks/remove.yaml
+    file: roles/docker_prometheus/tasks/remove.yml
   when: prometheus_deployment == 'remove'
