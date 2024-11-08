@@ -21,8 +21,8 @@
 
 - name: Copy Alert Manager config file
   ansible.builtin.template:
-    src: alertmanager.yaml.j2
-    dest: "{{ alert_manager_config_dir }}/alertmanager.yaml"
+    src: alertmanager.conf.j2
+    dest: "{{ alert_manager_config_dir }}/alertmanager.conf"
     owner: "{{ owner }}"
     group: "{{ group }}"
     mode: "0644"

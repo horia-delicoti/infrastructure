@@ -7,8 +7,8 @@ receivers:
     telegram_configs:
       - send_resolved: true
         bot_token: "{{ telegram_token }}"
-        chat_id: "{{ telegram_chat_id }}"
-        message: "{{ '[{{ .Status | toUpper }}] Alert: {{ .Annotations.summary }}\nDescription: {{ .Annotations.description }}\nSeverity: {{ .Labels.severity }}\nLabels: {{ .Labels }}' | tojson }}"
+        chat_id: {{ telegram_chat_id }}
+        message: {{ "[{{ .Status | toUpper }}]\nAlert: [{{ .CommonAnnotations.summary }}]\nDescription: {{ .CommonAnnotations.description}}\nSeverity: {{ .CommonLabels.severity}}\nLabels: {{ .CommonLabels}}" | tojson }}
 
 route:
   group_by: ['alertname']
