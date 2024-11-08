@@ -1,7 +1,5 @@
 ---
 
-rpi5_host: 192.168.5.11
-
 # Watchtower configuration variables
 
 watchtower_notification_title_tag: rpi5
