@@ -1,0 +1,7 @@
+- name: Restart Homer Container
+  listen: "Restart homer"
+  become: true
+  community.docker.docker_container:
+    name: homer
+    state: started
+    recreate: true

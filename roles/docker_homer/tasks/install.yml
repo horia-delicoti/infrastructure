@@ -30,8 +30,9 @@
     - roles/docker_homer/files/*.yml
     - roles/docker_homer/files/*.dist
     - roles/docker_homer/files/*.sample
+  notify: Restart homer
 
-- name: Copy Homer config directories
+- name: Copy Homer tools directories
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ homer_config_dir }}/tools/"
@@ -41,7 +42,7 @@
   with_items:
     - "roles/docker_homer/files/tools/"
 
-- name: Copy Homer config directories
+- name: Copy Homer icon directories
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ homer_config_dir }}/icons/"
