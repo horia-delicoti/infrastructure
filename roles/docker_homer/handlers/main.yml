@@ -1,7 +1,5 @@
 - name: Restart Homer Container
   listen: "Restart homer"
-  become: true
-  community.docker.docker_container:
-    name: homer
-    state: started
-    recreate: true
+  community.docker.docker_compose:
+    project_src: "{{ homer_home_dir }}"
+    state: present

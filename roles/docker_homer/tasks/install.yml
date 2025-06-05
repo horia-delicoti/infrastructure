@@ -52,9 +52,16 @@
   with_items:
     - "roles/docker_homer/files/icons/"
 
+- name: Check if Homer container is running
+  community.docker.docker_container_info:
+    name: "{{ homer_container_name }}"
+  register: homer_container_info
+  ignore_errors: true
+
 - name: Start Homer container using docker compose file
   community.docker.docker_compose:
     project_src: "{{ homer_home_dir }}"
+  when: homer_container_info.container is not defined or homer_container_info.container is none or not homer_container_info.container.State.Running
   register: output
 
 - name: Output log of docker

@@ -3,7 +3,7 @@ version: "{{ compose_version }}"
 services:
   homer:
     image: {{ homer_image }}
-    container_name: homer
+    container_name: {{ homer_container_name }}
     volumes:
       - {{ homer_config_dir }}:/www/assets
     ports:
