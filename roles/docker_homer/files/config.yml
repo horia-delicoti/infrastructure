@@ -216,7 +216,7 @@ services:
     # - name: "Weather"
     #   location: "Galati"
     #   keywords: "weather vreme"
-    #   #apikey: "18039ed7bd34b003a4ebfcd32413bf1a" # insert your own API key here. Request one from https://openweathermap.org/api.
+    #   #apikey: "xxx" # insert your own API key here. Request one from https://openweathermap.org/api.
     #   units: "metric"
     #   #endpoint: "http://localhost:8010/openweather/weather"
     #   type: "OpenWeather"
