@@ -46,6 +46,10 @@ prometheus_scrape_configs:
         - "{{ rpi4_host }}:8095"
         - "{{ synology_host }}:8095"
         - "{{ rpi5_host }}:8095"
+  - job_name: "nut"
+    metrics_path: "/ups_metrics"
+    static_configs:
+      - targets: ["{{ synology_host }}:9199"]
 
 # Prometheus targets
 ####################
@@ -75,54 +79,99 @@ prometheus_alert_rules:
       description: '{% raw %}{{ $labels.instance }} requires a reboot.{% endraw %}'
       summary: '{% raw %}Instance {{ $labels.instance }} - reboot required{% endraw %}'
   - alert: NodeFilesystemSpaceFillingUp
-    expr: "(\n  node_filesystem_avail_bytes{job=\"node\",fstype!=\"\"} / node_filesystem_size_bytes{job=\"node\",fstype!=\"\"} * 100 < 20\nand\n  predict_linear(node_filesystem_avail_bytes{job=\"node\",fstype!=\"\"}[6h], 4*60*60) < 0\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\"} == 0\n)\n"
+    expr: |
+      (
+        node_filesystem_avail_bytes{job="node",fstype!=""} / node_filesystem_size_bytes{job="node",fstype!=""} * 100 < 20
+        and
+        predict_linear(node_filesystem_avail_bytes{job="node",fstype!=""}[6h], 4*60*60) < 0
+        and
+        node_filesystem_readonly{job="node",fstype!=""} == 0
+      )
     for: 1h
     labels:
       severity: critical
     annotations:
-      description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left and is filling up fast.{% endraw %}'
+      description: >-
+        {% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only
+        {{ printf "%.2f" $value }}% available space left and is filling up fast.{% endraw %}
       summary: 'Filesystem is predicted to run out of space within the next 4 hours.'
   - alert: NodeFilesystemAlmostOutOfSpace
-    expr: "(\n  node_filesystem_avail_bytes{job=\"node\",fstype!=\"\"} / node_filesystem_size_bytes{job=\"node\",fstype!=\"\"} * 100 < 3\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\"} == 0\n)\n"
+    expr: |
+      (
+        node_filesystem_avail_bytes{job="node",fstype!=""} / node_filesystem_size_bytes{job="node",fstype!=""} * 100 < 3
+        and
+        node_filesystem_readonly{job="node",fstype!=""} == 0
+      )
     for: 1h
     labels:
       severity: critical
     annotations:
-      description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left.{% endraw %}'
+      description: >-
+        {% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only
+        {{ printf "%.2f" $value }}% available space left.{% endraw %}
       summary: 'Filesystem has less than 3% space left.'
   - alert: NodeFilesystemFilesFillingUp
-    expr: "(\n  node_filesystem_files_free{job=\"node\",fstype!=\"\"} / node_filesystem_files{job=\"node\",fstype!=\"\"} * 100 < 20\nand\n  predict_linear(node_filesystem_files_free{job=\"node\",fstype!=\"\"}[6h], 4*60*60) < 0\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\"} == 0\n)\n"
+    expr: |
+      (
+        node_filesystem_files_free{job="node",fstype!=""} / node_filesystem_files{job="node",fstype!=""} * 100 < 20
+        and
+        predict_linear(node_filesystem_files_free{job="node",fstype!=""}[6h], 4*60*60) < 0
+        and
+        node_filesystem_readonly{job="node",fstype!=""} == 0
+      )
     for: 1h
     labels:
       severity: critical
     annotations:
-      description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left and is filling up fast.{% endraw %}'
+      description: >-
+        {% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only
+        {{ printf "%.2f" $value }}% available inodes left and is filling up fast.{% endraw %}
       summary: 'Filesystem is predicted to run out of inodes within the next 4 hours.'
   - alert: NodeFilesystemAlmostOutOfFiles
-    expr: "(\n  node_filesystem_files_free{job=\"node\",fstype!=\"\"} / node_filesystem_files{job=\"node\",fstype!=\"\"} * 100 < 3\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\"} == 0\n)\n"
+    expr: |
+      (
+        node_filesystem_files_free{job="node",fstype!=""} / node_filesystem_files{job="node",fstype!=""} * 100 < 3
+        and
+        node_filesystem_readonly{job="node",fstype!=""} == 0
+      )
     for: 1h
     labels:
       severity: critical
     annotations:
-      description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left.{% endraw %}'
+      description: >-
+        {% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only
+        {{ printf "%.2f" $value }}% available inodes left.{% endraw %}
       summary: 'Filesystem has less than 3% inodes left.'
   - alert: NodeNetworkTransmitErrs
-    expr: "increase(node_network_transmit_errs_total[2m]) > 10\n"
+    expr: "increase(node_network_transmit_errs_total[2m]) > 10"
     for: 1h
     labels:
       severity: warning
     annotations:
-      description: '{% raw %}{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf "%.0f" $value }} transmit errors in the last two minutes.{% endraw %}'
+      description: >-
+        {% raw %}{{ $labels.instance }} interface {{ $labels.device }} has encountered
+        {{ printf "%.0f" $value }} transmit errors in the last two minutes.{% endraw %}
       summary: 'Network interface is reporting many transmit errors.'
   - alert: NodeHighNumberConntrackEntriesUsed
-    expr: "(node_nf_conntrack_entries / node_nf_conntrack_entries_limit) > 0.75\n"
+    expr: "(node_nf_conntrack_entries / node_nf_conntrack_entries_limit) > 0.75"
     labels:
       severity: warning
     annotations:
       description: '{% raw %}{{ $value | humanizePercentage }} of conntrack entries are used{% endraw %}'
       summary: 'Number of conntrack are getting close to the limit'
   - alert: NodeClockSkewDetected
-    expr: "(\n  node_timex_offset_seconds > 0.05\nand\n  deriv(node_timex_offset_seconds[5m]) >= 0\n)\nor\n(\n  node_timex_offset_seconds < -0.05\nand\n  deriv(node_timex_offset_seconds[5m]) <= 0\n)\n"
+    expr: |
+      (
+        node_timex_offset_seconds > 0.05
+        and
+        deriv(node_timex_offset_seconds[5m]) >= 0
+      )
+      or
+      (
+        node_timex_offset_seconds < -0.05
+        and
+        deriv(node_timex_offset_seconds[5m]) <= 0
+      )
     for: 10m
     labels:
       severity: warning
@@ -130,7 +179,7 @@ prometheus_alert_rules:
       description: '{% raw %}Clock on {{ $labels.instance }} is out of sync by more than 300s. Ensure NTP is configured correctly on this host.{% endraw %}'
       summary: 'Clock skew detected.'
   - alert: NodeClockNotSynchronising
-    expr: "min_over_time(node_timex_sync_status[5m]) == 0\n"
+    expr: "min_over_time(node_timex_sync_status[5m]) == 0"
     for: 10m
     labels:
       severity: warning
@@ -139,7 +188,7 @@ prometheus_alert_rules:
       summary: 'Clock not synchronising.'
   - alert: HostUnusualDiskReadRate
     expr: (sum by (instance) (rate(node_disk_read_bytes_total[2m])) / 1024 / 1024 > 50) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
-    for: 5m
+    for: 30m
     labels:
       severity: warning
     annotations:
@@ -147,7 +196,7 @@ prometheus_alert_rules:
       summary: "{% raw %}Host unusual disk read rate (instance {{ $labels.instance }}){% endraw %}"
   - alert: HostUnusualDiskWriteRate
     expr: (sum by (instance) (rate(node_disk_written_bytes_total[2m])) / 1024 / 1024 > 50) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
-    for: 2m
+    for: 10m
     labels:
       severity: warning
     annotations:
@@ -162,7 +211,13 @@ prometheus_alert_rules:
       description: "{% raw %}Node memory is filling up (< 10% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
       summary: "{% raw %}Host out of memory (instance {{ $labels.instance }}){% endraw %}"
   - alert: HostOutOfInodes
-    expr: (node_filesystem_files_free{fstype!="msdosfs"} / node_filesystem_files{fstype!="msdosfs"} * 100 < 10 and ON (instance, device, mountpoint) node_filesystem_readonly == 0) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
+    expr: |
+      (
+        node_filesystem_files_free{fstype!="msdosfs"} / node_filesystem_files{fstype!="msdosfs"} * 100 < 10
+        and
+        ON (instance, device, mountpoint) node_filesystem_readonly == 0
+      )
+      * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
     for: 2m
     labels:
       severity: warning
@@ -170,7 +225,14 @@ prometheus_alert_rules:
       description: "{% raw %}Disk is almost running out of available inodes (< 10% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
       summary: "{% raw %}Host out of inodes (instance {{ $labels.instance }}){% endraw %}"
   - alert: HostUnusualDiskReadLatency
-    expr: (rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 0.1 and rate(node_disk_reads_completed_total[1m]) > 0) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
+    expr: |
+      (
+        rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 0.1
+        and
+        rate(node_disk_reads_completed_total[1m]) > 0
+      )
+      * on(instance) group_left (nodename)
+      node_uname_info{nodename=~".+"}
     for: 2m
     labels:
       severity: warning
@@ -178,36 +240,55 @@ prometheus_alert_rules:
       description: "{% raw %}Disk latency is growing (read operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
       summary: "{% raw %}Host unusual disk read latency (instance {{ $labels.instance }}){% endraw %}"
   - alert: HostUnusualDiskWriteLatency
-    expr: (rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_writes_completed_total[1m]) > 0.1 and rate(node_disk_writes_completed_total[1m]) > 0) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
-    for: 2m
+    expr: |
+      (
+        rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_writes_completed_total[1m]) > 0.1
+        and
+        rate(node_disk_writes_completed_total[1m]) > 0
+      )
+      * on(instance) group_left (nodename)
+      node_uname_info{nodename=~".+"}
+    for: 10m
     labels:
       severity: warning
     annotations:
       description: "{% raw %}Disk latency is growing (write operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
       summary: "{% raw %}Host unusual disk write latency (instance {{ $labels.instance }}){% endraw %}"
   - alert: HostHighCpuLoad
-    expr: (sum by (instance) (avg by (mode, instance) (rate(node_cpu_seconds_total{mode!="idle"}[2m]))) > 0.8) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
+    expr: >
+      (
+        sum by (instance) (
+          avg by (mode, instance) (
+            rate(node_cpu_seconds_total{mode!="idle"}[2m])
+          )
+        ) > 0.8
+      )
+      * on(instance) group_left (nodename)
+      node_uname_info{nodename=~".+"}
     for: 10m
     labels:
       severity: warning
     annotations:
       description: "{% raw %}CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
       summary: "{% raw %}Host high CPU load (instance {{ $labels.instance }}){% endraw %}"
-  - alert: HostCpuIsUnderutilized
-    expr: (100 - (rate(node_cpu_seconds_total{mode="idle"}[30m]) * 100) < 20) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
-    for: 1w
-    labels:
-      severity: info
-    annotations:
-      description: "{% raw %}CPU load is < 20% for 1 week. Consider reducing the number of CPUs.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
-      summary: "{% raw %}Host CPU is underutilized (instance {{ $labels.instance }}){% endraw %}"
+# - alert: HostCpuIsUnderutilized
+#   expr: (100 - (rate(node_cpu_seconds_total{mode="idle"}[30m]) * 100) < 20) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
+#   for: 24w
+#   labels:
+#     severity: info
+#   annotations:
+#     description: "{% raw %}CPU load is < 20% for 1 week. Consider reducing the number of CPUs.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
+#     summary: "{% raw %}Host CPU is underutilized (instance {{ $labels.instance }}){% endraw %}"
   - alert: HostCpuHighIowait
     expr: (avg by (instance) (rate(node_cpu_seconds_total{mode="iowait"}[5m])) * 100 > 10) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
-    for: 0m
+    for: 30m
     labels:
       severity: warning
     annotations:
-      description: "{% raw %}CPU iowait > 10%. A high iowait means that you are disk or network bound.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
+      description: >-
+        {% raw %}CPU iowait > 10%. A high iowait means that you are disk or network bound.
+        VALUE = {{ $value }}
+        LABELS = {{ $labels }}{% endraw %}
       summary: "{% raw %}Host CPU high iowait (instance {{ $labels.instance }}){% endraw %}"
   - alert: HostSwapIsFillingUp
     expr: ((1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 80) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
@@ -226,7 +307,10 @@ prometheus_alert_rules:
       description: "{% raw %}systemd service crashed\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
       summary: "{% raw %}Host systemd service crashed (instance {{ $labels.instance }}){% endraw %}"
   - alert: HostPhysicalComponentTooHot
-    expr: ((node_hwmon_temp_celsius * ignoring(label) group_left(instance, job, node, sensor) node_hwmon_sensor_label{label!="tctl"} > 75)) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
+    expr: |
+      (
+        (node_hwmon_temp_celsius * ignoring(label) group_left(instance, job, node, sensor) node_hwmon_sensor_label{label!="tctl"} > 75)
+      ) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
     for: 5m
     labels:
       severity: warning
