@@ -1,6 +1,0 @@
----
-
-- name: Install Sonarr, Radarr, Deluge and Plex
-  ansible.builtin.include_tasks:
-    file: roles/htpc_download_box/tasks/install.yml
-  when: media_server_deployment == 'install'
