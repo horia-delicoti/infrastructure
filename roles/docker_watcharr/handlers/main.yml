@@ -1,0 +1,7 @@
+- name: Restart Watcharr Container
+  listen: "Restart Watcharr"
+  become: true
+  community.docker.docker_container:
+    name: watcharr
+    state: started
+    recreate: true

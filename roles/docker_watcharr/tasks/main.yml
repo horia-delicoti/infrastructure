@@ -1,0 +1,11 @@
+---
+
+- name: Install Watcharr
+  ansible.builtin.include_tasks:
+    file: roles/docker_watcharr/tasks/install.yml
+  when: watcharr_deployment == 'install'
+
+- name: Remove Watcharr
+  ansible.builtin.include_tasks:
+    file: roles/docker_watcharr/tasks/remove.yml
+  when: watcharr_deployment == 'remove'

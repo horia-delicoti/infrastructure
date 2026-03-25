@@ -1,0 +1,6 @@
+- name: Docker Watcharr
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_watcharr

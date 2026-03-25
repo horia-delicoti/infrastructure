@@ -1,0 +1,8 @@
+watcharr_deployment: install
+
+# Watcharr configuration vars
+###########################
+watcharr_image: 'ghcr.io/sbondco/watcharr:latest'
+watcharr_home_dir: '{{ home_dir }}/watcharr'
+watcharr_config_dir: /etc/watcharr
+watcharr_port: 3080

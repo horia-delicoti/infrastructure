@@ -1,0 +1,15 @@
+version: "{{ compose_version }}"
+
+services:
+  watcharr:
+    image: {{ watcharr_image }}
+    container_name: watcharr
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+    volumes:
+      - {{ watcharr_config_dir }}:/data
+    ports:
+      - {{ watcharr_port }}:{{ watcharr_port }}
+    restart: unless-stopped

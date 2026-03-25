@@ -1,0 +1,29 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "755"
+  with_items:
+    - "{{ watcharr_home_dir }}"
+    - "{{ watcharr_config_dir }}"
+
+- name: Copy Watcharr docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ watcharr_home_dir }}/docker-compose.yaml"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "644"
+
+- name: Start Watcharr container using docker compose file
+  community.docker.docker_compose:
+    project_src: "{{ watcharr_home_dir }}"
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output
