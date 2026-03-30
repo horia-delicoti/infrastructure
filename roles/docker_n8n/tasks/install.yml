@@ -1,0 +1,30 @@
+---
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "755"
+  with_items:
+    - "{{ n8n_home_dir }}"
+    - "{{ n8n_internal_data_dir }}"
+    - "{{ n8n_local_files }}"
+
+- name: Copy n8n docker compose file
+  ansible.builtin.template:
+    force: true
+    src: "docker-compose.yaml.j2"
+    dest: "{{ n8n_home_dir }}/docker-compose.yaml"
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    mode: "644"
+
+- name: Start n8n container using docker compose file
+  community.docker.docker_compose:
+    project_src: "{{ n8n_home_dir }}"
+  register: output
+
+- name: Output log of docker
+  ansible.builtin.debug:
+    var: output

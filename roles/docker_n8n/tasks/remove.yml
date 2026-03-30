@@ -1,0 +1,14 @@
+---
+- name: Stopping n8n docker container
+  community.docker.docker_compose:
+    project_src: "{{ n8n_home_dir }}"
+    state: absent
+
+- name: Remove directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ n8n_home_dir }}"
+    - "{{ n8n_internal_data_dir }}"
+    - "{{ n8n_local_files }}"

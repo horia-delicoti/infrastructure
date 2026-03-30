@@ -1,0 +1,6 @@
+- name: Install n8n in Docker
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker_n8n

@@ -1,0 +1,11 @@
+---
+
+- name: Install n8n
+  ansible.builtin.include_tasks:
+    file: roles/docker_n8n/tasks/install.yml
+  when: n8n_deployment == 'install'
+
+- name: Remove n8n
+  ansible.builtin.include_tasks:
+    file: roles/docker_n8n/tasks/remove.yml
+  when: n8n_deployment == 'remove'

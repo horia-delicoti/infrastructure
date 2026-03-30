@@ -1,0 +1,7 @@
+- name: Restart n8n Container
+  listen: "Restart n8n"
+  become: true
+  community.docker.docker_container:
+    name: n8n
+    state: started
+    recreate: true

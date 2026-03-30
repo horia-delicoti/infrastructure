@@ -1,0 +1,26 @@
+version: "{{ compose_version }}"
+
+services:
+  n8n:
+    image: {{ n8n_image }}
+    container_name: n8n
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+      - GENERIC_TIMEZONE=Europe/London # Set the timezone for n8n
+      - N8N_HOST=0.0.0.0 # Listen on all interfaces
+      - N8N_PORT=5678 # n8n port inside the container
+      - N8N_PROTOCOL=http # Use HTTP protocol
+      - NODE_ENV=production # Set the environment to production
+      - WEBHOOK_URL=http://{{ rpi5_host}}:5678/ # Webhook URL for n8n to receive incoming requests
+      - N8N_EDITOR_BASE_URL=http://{{ rpi5_host}}:5678/ # Base URL for the n8n editor
+      - N8N_SECURE_COOKIE=false # Disable secure cookies since we're not using HTTPS
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true # Enforce permissions on the settings file for security
+      - N8N_RUNNERS_ENABLED=true # Enable n8n runners for executing workflows
+    volumes:
+      - {{ n8n_internal_data_dir }}:/home/node/.n8n # n8n internal data
+      - {{ n8n_local_files }}:/files # file I/O from workflows
+    ports:
+      - {{ n8n_port }}:5678
+    restart: always
